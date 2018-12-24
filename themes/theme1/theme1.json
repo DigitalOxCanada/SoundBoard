@@ -1,0 +1,36 @@
+[
+  {
+    "TheKey": "NumPad0",
+    "Title": "Air Horn",
+    "Audio": "air horn.wav",
+    "Image": "air horn.png",
+    "Video": "fire.mp4"
+  },
+  {
+    "TheKey": "NumPad1",
+    "Title": "Inconceivable",
+    "Audio": "Inconceivable.wav",
+    "Image": "Inconceivable.png",
+    "Video": "santa.mp4"
+  },
+  {
+    "TheKey": "NumPad2",
+    "Title": "Arnold No Problemo",
+    "Audio": "Arnold No Problemo.wav",
+    "Image": "arnold no problemo.png",
+    "Video": "thumbsup.mp4"
+  },
+  {
+    "TheKey": "NumPad3",
+    "Title": "Brain Ponder",
+    "Audio": "Brain Ponder.wav",
+    "Image": "",
+    "Video": "burst.mp4"
+  },
+  {
+    "TheKey": "NumPad4",
+    "Title": "Pinky Alright",
+    "Audio": "Pinky Alright.wav",
+    "Image": ""
+  }
+]
