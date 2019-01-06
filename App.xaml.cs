@@ -13,5 +13,18 @@ namespace SoundBoard
     /// </summary>
     public partial class App : Application
     {
+        public bool ShowVideos { get; set; }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            ShowVideos = true;
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+            MainWindow wnd = new MainWindow();
+            MainWindow = wnd;
+            wnd.Title = "SoundBoard";
+            wnd.Show();
+        }
+
     }
 }

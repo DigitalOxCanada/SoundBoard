@@ -23,21 +23,28 @@ namespace SoundBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+        //TODO editor mode
+        //TODO allow drag and drop of media files onto buttons while in edit mode
+        //TODO wire up menu items
+        //TODO add functionality to stop video and audio currently playing
         //TODO change themes from within the gui
-        //TODO varied sizes of buttons defined in the theme file
+        //TODO varied sizes of buttons defined in the theme file (can't with wrap grid so what is alternative)
         //TODO xaml template for look and feel of the buttons (font size, colour, etc.)
+        //TODO use databinding on button props
         const string THEMEFOLDER = "themes";
-        const string selectedThemeName = "theme1";
-
-
         HotKeyManager hotKeyManager = new HotKeyManager();
         WaveOutEvent outputDevice;
         AudioFileReader audioFile;
 
-        List<HotKeyButton> hotKeyButtons = new List<HotKeyButton>();
+        List<ActionButton> hotKeyButtons = new List<ActionButton>();
 
         private SubWindow subWindow = new SubWindow();
 
+        App myApp;
+
+        const string selectedThemeName = "theme1";
+        
+        //TODO make this dynamic
         private string selectedThemePath = $"{THEMEFOLDER}/{selectedThemeName}";
 
         /// <summary>
@@ -46,6 +53,9 @@ namespace SoundBoard
         public MainWindow()
         {
             InitializeComponent();
+            myApp = (App)Application.Current;
+            menuShowVideos.IsChecked = myApp.ShowVideos;
+            ShowVideosChanged();
 
             if (outputDevice == null)
             {
@@ -60,71 +70,103 @@ namespace SoundBoard
             string json = System.IO.File.ReadAllText($"{selectedThemePath}/{selectedThemeName}.json");
 
             //deserialize the json theme information as hotkeybuttons
-            hotKeyButtons = JsonConvert.DeserializeObject<List<HotKeyButton>>(json);
+            hotKeyButtons = JsonConvert.DeserializeObject<List<ActionButton>>(json);
 
             //for each button assign the hotkey and create the visual button with details
-            foreach (var hkb in hotKeyButtons)
+            foreach (var btn in hotKeyButtons)
             {
                 bool AudioFileExists = false;
+                bool VideoFileExists = false;
 
-                if(!String.IsNullOrEmpty(hkb.Audio))
+
+                if (!String.IsNullOrEmpty(btn.Audio))
                 {
-                    if(System.IO.File.Exists($"{selectedThemePath}/{hkb.Audio}"))
+                    if(System.IO.File.Exists($"{selectedThemePath}/{btn.Audio}"))
                     {
                         AudioFileExists = true;
                     }
                 }
 
-                MyButton newButton = new MyButton();
-                newButton.TheHkb = hkb;
-                if (AudioFileExists)
+                if (!String.IsNullOrEmpty(btn.Video))
                 {
-                    newButton.TheHotKey = hotKeyManager.Register(hkb.TheKey, ModifierKeys.Control | ModifierKeys.Alt);
-                }else
+                    if (System.IO.File.Exists($"{selectedThemePath}/{btn.Video}"))
+                    {
+                        VideoFileExists = true;
+                        btn.imgVideo.Visibility = Visibility.Visible;
+                    }
+                }
+                else
                 {
-                    newButton.IsEnabled = false;
+                    btn.imgVideo.Visibility = Visibility.Hidden;
                 }
 
-                newButton.Margin = new Thickness(5);
-                var sp = new StackPanel();
-                var tb1 = new TextBlock() { 
-                    Text = $"{hkb.Title}",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    TextWrapping = TextWrapping.Wrap
-                };
-
-                var tb2 = new TextBlock()
+                if (!string.IsNullOrEmpty(btn.Color))
                 {
-                    Text = $"{hkb.TheKey}",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    TextWrapping = TextWrapping.Wrap
-                };
-                sp.Children.Add(tb1);
-                sp.Children.Add(tb2);
-                newButton.Content = sp;
+                    //newButton.Background = new SolidColorBrush(Colors.AliceBlue);
+                    var color = (Color)ColorConverter.ConvertFromString(btn.Color);
+                    btn.Background = new SolidColorBrush(color);
+                }
+
+
+                if (AudioFileExists | VideoFileExists)
+                {
+                    //only wire up the hotkey if one is specified and that there is something to play (audio or video), otherwise the user must click the button
+                    if (btn.TheKey != null)
+                    {
+                        btn.TheHotKey = hotKeyManager.Register((Key)btn.TheKey, ModifierKeys.Control | ModifierKeys.Alt);
+                    }
+                }
+                else
+                {
+                    btn.IsEnabled = false;
+                }
+
+                
+                string title = $"{btn.Title}";
+
+                if (string.IsNullOrEmpty(btn.Title))
+                {
+                    title = btn.Audio;
+                }
+
+                btn.txtRow1.Text = title;
+
+                if (btn.TheKey != null)
+                {
+                    btn.txtRow2.Text = $"{btn.TheKey}";
+                }
+                else
+                {
+                    btn.txtRow2.Text = "";
+                }
+                
                 ImageBrush brush = new ImageBrush();
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 string img = "nopic.png";
 
-                if (!String.IsNullOrEmpty(hkb.Image)) {
-                    if(System.IO.File.Exists($"{selectedThemePath}/{hkb.Image}"))
+                //only if image is specified we try to load the image, if no image we use default nopic.png
+                if (!String.IsNullOrEmpty(btn.Image)) {
+                    if(System.IO.File.Exists($"{selectedThemePath}/{btn.Image}"))
                     {
-                        img = $"{selectedThemePath}/{hkb.Image}";
+                        img = $"{selectedThemePath}/{btn.Image}";
                     }
+                    bitmap.UriSource = new Uri($"{img}", UriKind.Relative);
+                    bitmap.EndInit();
+                    brush.ImageSource = bitmap;
+                    btn.Background = brush;
                 }
 
-                bitmap.UriSource = new Uri($"{img}", UriKind.Relative);
-                bitmap.EndInit();
-                brush.ImageSource = bitmap;
-                newButton.Background = brush;
-                newButton.Click += PlaySoundButton_Click;
-                wrapPanel.Children.Add(newButton);
+                btn.Click += PlaySoundButton_Click;
+                wrapPanel.Children.Add(btn);
             }
 
             hotKeyManager.KeyPressed += HotKeyManagerPressed;
 
-            subWindow.Show();
+            if (myApp.ShowVideos)
+            {
+                subWindow.Show();
+            }
 
         }
 
@@ -135,9 +177,9 @@ namespace SoundBoard
         /// <param name="e"></param>
         private void PlaySoundButton_Click(object sender, RoutedEventArgs e)
         {
-            MyButton btn = (MyButton)sender;
-            PlaySound(btn.TheHkb.Audio);
-            PlayVideo(btn.TheHkb.Video);
+            ActionButton btn = (ActionButton)sender;
+            PlaySound(btn.Audio);
+            PlayVideo(btn.Video);
         }
 
         /// <summary>
@@ -148,7 +190,10 @@ namespace SoundBoard
         {
             if (string.IsNullOrEmpty(video)) return;
 
-            subWindow.LoadVideo($"{selectedThemePath}/{video}");
+            if (myApp.ShowVideos)
+            {
+                subWindow.LoadVideo($"{selectedThemePath}/{video}");
+            }
         }
 
         /// <summary>
@@ -204,7 +249,7 @@ namespace SoundBoard
             outputDevice = null;
 
             // Unregister Ctrl+Alt+Key hotkey.
-            var collection = wrapPanel.Children.OfType<MyButton>().ToList();
+            var collection = wrapPanel.Children.OfType<ActionButton>().ToList();
             foreach (var btn in collection)
             {
                 if (btn.TheHotKey != null)
@@ -215,6 +260,31 @@ namespace SoundBoard
 
             // Dispose the hotkey manager.
             hotKeyManager.Dispose();
+        }
+
+
+        private void ShowVideos_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            myApp.ShowVideos = !myApp.ShowVideos;
+            ShowVideosChanged();
+        }
+
+        private void ShowVideosChanged()
+        {
+            menuShowVideos.IsChecked = myApp.ShowVideos;
+            if (!myApp.ShowVideos)
+            {
+                subWindow.Hide();
+            }
+            else
+            {
+                subWindow.Show();
+            }
+        }
+
+        private void Exit_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            myApp.Shutdown();
         }
     }
 }

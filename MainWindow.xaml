@@ -5,9 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoundBoard"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="450" Unloaded="Window_Unloaded">
-    <Grid Name="grid1">
-        <WrapPanel Name="wrapPanel" ItemWidth="100" ItemHeight="100">
+        Height="600" Width="1024" Unloaded="Window_Unloaded">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <!--<MenuItem Header="_New" />-->
+                <MenuItem Header="_Open" />
+                <!--<MenuItem Header="_Save" />-->
+                <Separator />
+                <MenuItem Header="_Exit" Click="Exit_MenuItem_Click" />
+            </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Name="menuShowVideos" Header="_Show Videos" IsCheckable="True" Click="ShowVideos_MenuItem_Click" />
+            </MenuItem>
+        </Menu>
+        <WrapPanel DockPanel.Dock="Bottom" Name="wrapPanel" ItemWidth="100" ItemHeight="100">
         </WrapPanel>
-    </Grid>
+    </DockPanel>
 </Window>
