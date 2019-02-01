@@ -1,8 +1,10 @@
-# SoundBoard
-Live Coding Session Built Sound Board App for live streaming sessions. 
-Live Coding Session to convert .Net Framework WPF version of app into a .Net Core 3 (Preview) WPF app.
-
-# Features
+# SoundBoard  
+Live Coding Session Built Sound Board App for live streaming sessions.  
+Live Coding Session to convert .Net Framework WPF version of app into a .Net Core 3 (Preview) WPF app.  
+  
+![Screenshot](Annotation.png)  
+  
+# Features  
 - Global HotKey so even when the app isn't in focus the HotKey will activate the action.
 - Can be Audio files & green screen video files.
 - Can use with any streaming service.
