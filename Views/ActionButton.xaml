@@ -10,7 +10,7 @@
         AllowDrop="True" 
         Drop="Button_Drop"
         BorderBrush="{Binding Path=Color,Converter={StaticResource ColorToBrushConverter}}"
-        BorderThickness="2"
+        BorderThickness="2" MouseDoubleClick="Button_MouseDoubleClick"
         >
     <Button.Resources>
     </Button.Resources>

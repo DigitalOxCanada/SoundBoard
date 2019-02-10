@@ -1,6 +1,7 @@
 ﻿using GlobalHotKey;
 using Newtonsoft.Json;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,12 +9,20 @@ using System.Windows.Input;
 
 namespace SoundBoardWPF.Views
 {
+    public class ActionBase
+    {
+        public string Action { get; set; }
+        public string Data { get; set; }
+    }
     /// <summary>
     /// Interaction logic for ActionButton.xaml
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
     public partial class ActionButton : Button, INotifyPropertyChanged
     {
+
+        [JsonProperty]
+        public ObservableCollection<ActionBase> Actions { get; set; }
 
         private Key? theKey;
 
@@ -31,7 +40,7 @@ namespace SoundBoardWPF.Views
             }
         }
 
-
+         
         private string title;
 
         [JsonProperty]
@@ -52,8 +61,8 @@ namespace SoundBoardWPF.Views
         }
 
 
-        [JsonProperty]
-        public string Audio { get; set; }
+        //[JsonProperty]
+        //public string Audio { get; set; }
 
         private string _image;
         [JsonProperty]
@@ -63,8 +72,8 @@ namespace SoundBoardWPF.Views
             set { _image = value; OnPropertyChanged("Image"); }
         }
 
-        [JsonProperty]
-        public string Video { get; set; }
+        //[JsonProperty]
+        //public string Video { get; set; }
 
         private string _color;
 
@@ -81,20 +90,8 @@ namespace SoundBoardWPF.Views
                 }
             }
         }
-        //public string Color { get { return _color; } set {
-        //        if (!string.IsNullOrEmpty(value))
-        //        {
-        //            var color = (Color)ColorConverter.ConvertFromString(value);
-        //            BGColor = new SolidColorBrush(color);
-        //            _color = value;
-        //            OnPropertyChanged("BGColor");
-        //        }
-        //    }
-        //}
 
-        //public SolidColorBrush BGColor { get; set; }
-
-        public Visibility IsVideo { get { if (Video != null) return Visibility.Visible; else return Visibility.Hidden; } }
+//        public Visibility IsVideo { get { if (Video != null) return Visibility.Visible; else return Visibility.Hidden; } }
 
         public HotKey TheHotKey { get; set; }
 
@@ -121,69 +118,41 @@ namespace SoundBoardWPF.Views
 
         public void UpdateMedia()
         {
-            bool AudioFileExists = false;
-            bool VideoFileExists = false;
+            //bool AudioFileExists = false;
+            //bool VideoFileExists = false;
 
             imgVideo.Visibility = Visibility.Hidden;
 
-            if (!String.IsNullOrEmpty(Audio))
-            {
-                if (System.IO.File.Exists($"{myApp.selectedThemePath}/{Audio}"))
-                {
-                    AudioFileExists = true;
-                }
-            }
-
-            if (!String.IsNullOrEmpty(Video))
-            {
-                if (System.IO.File.Exists($"{myApp.selectedThemePath}/{Video}"))
-                {
-                    VideoFileExists = true;
-                    imgVideo.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                imgVideo.Visibility = Visibility.Hidden;
-            }
-
-
-            if (AudioFileExists | VideoFileExists)
-            {
-                //only wire up the hotkey if one is specified and that there is something to play (audio or video), otherwise the user must click the button
-                //if (TheKey != null)
-                //{
-                //    TheHotKey = hotKeyManager.Register((Key)TheKey, ModifierKeys.Control | ModifierKeys.Alt);
-                //}
-            }
-            else
-            {
-                //IsEnabled = false;
-            }
-
-            if (string.IsNullOrEmpty(Title) && !string.IsNullOrEmpty(Audio))
-            {
-                Title = Audio;
-            }
-
-
-            //ImageBrush brush = new ImageBrush();
-            //BitmapImage bitmap = new BitmapImage();
-            //bitmap.BeginInit();
-            //string img = "nopic.png";
-
-            ////only if image is specified we try to load the image, if no image we use default nopic.png
-            //if (!string.IsNullOrEmpty(Image))
+            //if (!String.IsNullOrEmpty(Audio))
             //{
-            //    if (System.IO.File.Exists($"{myApp.selectedThemePath}/{Image}"))
+            //    if (System.IO.File.Exists($"{myApp.selectedThemePath}/{Audio}"))
             //    {
-            //        img = $"{myApp.selectedThemePath}/{Image}";
+            //        AudioFileExists = true;
             //    }
-            //    bitmap.UriSource = new Uri($"{img}", UriKind.Relative);
-            //    bitmap.EndInit();
-            //    brush.ImageSource = bitmap;
-            //    Background = brush;
             //}
+
+            //if (!String.IsNullOrEmpty(Video))
+            //{
+            //    if (System.IO.File.Exists($"{myApp.selectedThemePath}/{Video}"))
+            //    {
+            //        VideoFileExists = true;
+            //        imgVideo.Visibility = Visibility.Visible;
+            //    }
+            //}
+            //else
+            //{
+            //    imgVideo.Visibility = Visibility.Hidden;
+            //}
+
+
+            //if (string.IsNullOrEmpty(Title) && !string.IsNullOrEmpty(Audio))
+            //{
+            //    Title = Audio;
+            //}
+            if(string.IsNullOrEmpty(Title))
+            {
+                Title = "No Title";
+            }
 
         }
 
@@ -196,7 +165,7 @@ namespace SoundBoardWPF.Views
                 string file = files[0];
 
                 //copy the file from source to the current theme path keeping the filename.
-                System.IO.File.Copy(file, System.IO.Path.Combine(((App)Application.Current).selectedThemePath, System.IO.Path.GetFileName(file)), true);
+                System.IO.File.Copy(file, System.IO.Path.Combine(((App)Application.Current).SelectedThemePath, System.IO.Path.GetFileName(file)), true);
 
                 //TODO move the file to the current theme path
                 //TODO associate the file to image or video or audio depending on extension.
@@ -205,7 +174,7 @@ namespace SoundBoardWPF.Views
                     //audio
                     case ".wav":
                     case ".mp3":
-                        Audio = System.IO.Path.GetFileName(file);
+//                        Audio = System.IO.Path.GetFileName(file);
                         break;
 
                     //video
@@ -213,7 +182,7 @@ namespace SoundBoardWPF.Views
                     case ".mpeg":
                     case ".wmv":
                     case ".mp4":
-                        Video = System.IO.Path.GetFileName(file);
+//                        Video = System.IO.Path.GetFileName(file);
                         break;
 
                     //image
@@ -221,6 +190,35 @@ namespace SoundBoardWPF.Views
                     case ".jpeg":
                     case ".png":
                         //TODO add background brush
+                        break;
+                }
+            }
+        }
+
+        private void Button_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ActionButton btn = (ActionButton)sender;
+            foreach(var action in btn.Actions)
+            {
+                switch(action.Action)
+                {
+                    case "PlayMedia":
+                        switch (System.IO.Path.GetExtension(action.Data).ToLower())
+                        {
+                            //audio
+                            case ".wav":
+                            case ".mp3":
+                                myApp.PlaySound(action.Data);
+                                break;
+
+                            //video
+                            case ".mpg":
+                            case ".mpeg":
+                            case ".wmv":
+                            case ".mp4":
+                                myApp.PlayVideo(action.Data);
+                                break;
+                        }
                         break;
                 }
             }

@@ -33,7 +33,7 @@
             </MenuItem>
         </Menu>
 
-        <Grid>
+        <Grid MouseDown="ItemsPanel_MouseDown">
             <Grid.RowDefinitions>
                 <RowDefinition Height="8*" />
                 <RowDefinition Height="5" />
@@ -65,57 +65,60 @@
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
             <StackPanel Grid.Row="2">
                 <!--<Expander DockPanel.Dock="Bottom" ExpandDirection="Up" Background="#FFC5C5C5" BorderBrush="#FF838383" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed">-->
-                <TextBlock Text="Edit Action Button" Margin="0,0,0,20" HorizontalAlignment="Center"></TextBlock>
-                <Grid>
+                <TextBlock Text="Edit Action Button" Margin="0,0,0,5" HorizontalAlignment="Center"></TextBlock>
+                <Grid Visibility="{Binding SelectedActionButton,Converter={StaticResource HiddenIfNullConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.Column="0">
-                        <StackPanel Orientation="Horizontal" >
-                            <TextBlock Text="Title"></TextBlock>
-                            <TextBox Text="{Binding Path=SelectedActionButton.Title}"></TextBox>
+
+                    <StackPanel Margin="3" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="3">
+                        <TextBlock Margin="3" Text="Title"></TextBlock>
+                        <TextBox Margin="3" Text="{Binding Path=SelectedActionButton.Title}" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}"></TextBox>
+                        <Button Click="RemoveAction_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}">Remove</Button>
+                    </StackPanel>
+
+                    <StackPanel Margin="3" Orientation="Vertical" Grid.Column="0" Grid.Row="1">
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <TextBlock Margin="3" Text="Button Color"></TextBlock>
+                            <Rectangle Margin="3" Width="25" Height="25" Stroke="Black" Fill="{Binding Path=SelectedActionButton.Color,Converter={StaticResource ColorToBrushConverter}}"></Rectangle>
+                            <Button Margin="3" Click="ChangeColorButton_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}">...</Button>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Button Color"></TextBlock>
-                            <Rectangle Width="25" Height="25" Stroke="Black" Fill="{Binding Path=SelectedActionButton.Color,Converter={StaticResource ColorToBrushConverter}}"></Rectangle>
-                            <Button Click="ChangeColorButton_Click">...</Button>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                            <TextBlock Text="Button Image"></TextBlock>
-                            <Grid Background="{Binding Path=SelectedActionButton.Image,Converter={StaticResource ImageToBrushConverter}}" Width="80" Height="80"></Grid>
-                            <Button Click="ChangeImageButton_Click">...</Button>
-                            <Button Click="PasteFromClipboard_Click">Paste from Clipboard</Button>
+                        <StackPanel Margin="3" Orientation="Horizontal" >
+                            <TextBlock Margin="3" Text="Button Image"></TextBlock>
+                            <Grid Margin="3" Background="{Binding Path=SelectedActionButton.Image,Converter={StaticResource ImageToBrushConverter}}" Width="80" Height="80"></Grid>
+                            <Button Margin="3" Click="ChangeImageButton_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}">...</Button>
+                            <Button Margin="3" Click="PasteFromClipboard_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}">Paste from Clipboard</Button>
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Column="1">
-                        <TextBlock Text="Hot Key"></TextBlock>
-                        <!--<TextBox Text="{Binding Path=SelectedActionButton.TheKey, Mode=OneWay, Converter={StaticResource enumItemsConverter}}"></TextBox>-->
-                        <ComboBox x:Name="cmbEnumType" SelectedValue="{Binding Path=SelectedActionButton.TheKey}" ItemsSource="{Binding Source={StaticResource keyData}}"></ComboBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Column="2">
-                        <TextBlock Text="Action(s)"></TextBlock>
-                        <ListBox>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock>ListBox Item #1</TextBlock>
-                                    <Button>Play</Button>
-                                </StackPanel>
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock>ListBox Item #2</TextBlock>
-                                    <Button>Play</Button>
-                                </StackPanel>
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock>ListBox Item #3</TextBlock>
-                                    <Button>Play</Button>
-                                </StackPanel>
-                            </ListBoxItem>
-                        </ListBox>
+
+                    <StackPanel Margin="3" Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <TextBlock Margin="3" Text="Hot Key"></TextBlock>
+                            <!--<TextBox Text="{Binding Path=SelectedActionButton.TheKey, Mode=OneWay, Converter={StaticResource enumItemsConverter}}"></TextBox>-->
+                            <ComboBox Margin="3" x:Name="cmbEnumType" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}" SelectedValue="{Binding Path=SelectedActionButton.TheKey}" ItemsSource="{Binding Source={StaticResource keyData}}"></ComboBox>
+                        </StackPanel>
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <TextBlock Margin="3" Text="Action(s)"></TextBlock>
+                            <ListBox ItemsSource="{Binding SelectedActionButton.Actions, UpdateSourceTrigger=PropertyChanged}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="200" />
+                                                <ColumnDefinition Width="100" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Path=Data}" Grid.Column="0" />
+                                            <Button Content="{Binding Path=Action}" Grid.Column="1"></Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </StackPanel>

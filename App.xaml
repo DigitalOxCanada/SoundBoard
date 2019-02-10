@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SoundBoardWPF"
              xmlns:localc="clr-namespace:SoundBoardWPF.Converters"
-             Startup="Application_Startup">
+             Startup="Application_Startup" Exit="Application_Exit">
     <Application.Resources>
         <localc:EnumToStringConverter x:Key="enumItemsConverter"/>
         <localc:ColorStringToBrushConverter x:Key="ColorToBrushConverter"/>
         <localc:ImageToBrushConverter x:Key="ImageToBrushConverter"/>
+        <localc:ObjectIsNullConverter x:Key="ObjectIsNullConverter"/>
+        <localc:HiddenIfNullConverter x:Key="HiddenIfNullConverter"/>
     </Application.Resources>
 </Application>

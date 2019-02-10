@@ -25,10 +25,8 @@ namespace SoundBoardWPF.Views
         //TODO change themes from within the gui
         //TODO varied sizes of buttons defined in the theme file (can't with wrap grid so what is alternative)
         readonly HotKeyManager hotKeyManager = new HotKeyManager();
-        WaveOutEvent outputDevice;
-        AudioFileReader audioFile;
 
-        private readonly SubWindow subWindow = new SubWindow();
+        public SubWindow subWindow;
 
         public MyViewModel myViewModel { get; set; }
 
@@ -41,6 +39,7 @@ namespace SoundBoardWPF.Views
         public MainWindow()
         {
             myViewModel = new MyViewModel();
+            subWindow = new SubWindow();
             DataContext = myViewModel;
             myApp = (App)Application.Current;
 
@@ -53,34 +52,7 @@ namespace SoundBoardWPF.Views
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlayActionButton_Click(object sender, RoutedEventArgs e)
-        {
-            ActionButton btn = (ActionButton)sender;
-            PlaySound(btn.Audio);
-            PlayVideo(btn.Video);
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="video"></param>
-        private void PlayVideo(string video)
-        {
-            if (string.IsNullOrEmpty(video))
-            {
-                return;
-            }
-
-            if (myApp.ShowVideos)
-            {
-                subWindow.LoadVideo($"{myApp.selectedThemePath}/{video}");
-            }
-        }
 
         /// <summary>
         /// 
@@ -92,41 +64,11 @@ namespace SoundBoardWPF.Views
             var btn = (from p in myViewModel.ActionButtons where p.TheKey == e.HotKey.Key select p).SingleOrDefault();
             if (btn != null)
             {
-                PlaySound(btn.Audio);
-                PlayVideo(btn.Video);
+                //PlaySound(btn.Audio);
+                //PlayVideo(btn.Video);
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="audiofn"></param>
-        private void PlaySound(string audiofn)
-        {
-            if (string.IsNullOrEmpty(audiofn))
-            {
-                return;
-            }
-
-            if (audioFile == null)
-            {
-                audioFile = new AudioFileReader($"{myApp.selectedThemePath}/{audiofn}");
-                outputDevice.Init(audioFile);
-            }
-            outputDevice.Play();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnPlaybackStopped(object sender, StoppedEventArgs e)
-        {
-            if (audioFile == null) return;
-            audioFile.Dispose();
-            audioFile = null;
-        }
 
         /// <summary>
         /// 
@@ -135,8 +77,6 @@ namespace SoundBoardWPF.Views
         /// <param name="e"></param>
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
-            outputDevice.Dispose();
-            outputDevice = null;
 
             // Unregister Ctrl+Alt+Key hotkey.
             foreach (var btn in myViewModel.ActionButtons)
@@ -200,17 +140,12 @@ namespace SoundBoardWPF.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (outputDevice == null)
-            {
-                outputDevice = new WaveOutEvent();
-                outputDevice.PlaybackStopped += OnPlaybackStopped;
-            }
 
             //TODO search for available themes in output folder (themes/themename/themename.json)
 
             //TODO if there is only 1 theme then just automatically use it, otherwise maybe prompt for which one?
 
-            string json = System.IO.File.ReadAllText($"{myApp.selectedThemePath}/{myApp.selectedThemeName}.json");
+            string json = System.IO.File.ReadAllText($"{myApp.SelectedThemePath}/{myApp.selectedThemeName}.json");
 
             //deserialize the json theme information
             myViewModel = JsonConvert.DeserializeObject<MyViewModel>(json);
@@ -238,7 +173,7 @@ namespace SoundBoardWPF.Views
 
         private void WireUpActionButton(ActionButton btn)
         {
-            btn.MouseDoubleClick += PlayActionButton_Click;
+            //btn.MouseDoubleClick += PlayActionButton_Click;
             btn.Click += SelectAction_Click;
         }
 
@@ -268,7 +203,7 @@ namespace SoundBoardWPF.Views
             {
                 //imgPhoto.Source = new BitmapImage(new Uri(op.FileName));
                 //copy the file from source to the current theme path keeping the filename.
-                string outputFn = System.IO.Path.Combine(myApp.selectedThemePath, System.IO.Path.GetFileName(op.FileName));
+                string outputFn = System.IO.Path.Combine(myApp.SelectedThemePath, System.IO.Path.GetFileName(op.FileName));
                 System.IO.File.Copy(op.FileName, outputFn, true);
                 myViewModel.SelectedActionButton.Image = System.IO.Path.GetFileName(op.FileName);
             }
@@ -281,7 +216,7 @@ namespace SoundBoardWPF.Views
                 var imgdata = Clipboard.GetImage();
                 if(imgdata==null) return;
                 string newfilename = myViewModel.SelectedActionButton.Title + ".bmp";
-                string outputFn = System.IO.Path.Combine(myApp.selectedThemePath, newfilename);
+                string outputFn = System.IO.Path.Combine(myApp.SelectedThemePath, newfilename);
                 using (var fileStream = new FileStream(outputFn, FileMode.Create))
                 {
                     BitmapEncoder encoder = new PngBitmapEncoder();
@@ -306,6 +241,17 @@ namespace SoundBoardWPF.Views
             MemoryStream ms = new MemoryStream();
             bf.Serialize(ms, obj);
             return ms.ToArray();
+        }
+
+        private void ItemsPanel_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            myViewModel.SelectedActionButton = null;
+        }
+
+        private void RemoveAction_Click(object sender, RoutedEventArgs e)
+        {
+            myViewModel.ActionButtons.Remove(myViewModel.SelectedActionButton);
+            myViewModel.SelectedActionButton = null;
         }
     }
 }

@@ -4,41 +4,87 @@
     {
       "TheKey": "NumPad0",
       "Title": "Air Horn",
-      "Audio": "air horn.wav",
       "Image": "air horn.png",
-      "Video": "fire.mp4"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "air horn.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "fire.mp4"
+        }
+      ]
     },
     {
       "TheKey": "NumPad1",
       "Title": "Inconceivable",
-      "Audio": "Inconceivable.wav",
       "Image": "Inconceivable.png",
-      "Video": "santa.mp4"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "Inconceivable.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "santa.mp4"
+        }
+      ]
+
     },
     {
       "TheKey": "NumPad2",
       "Title": "Arnold No Problemo",
-      "Audio": "Arnold No Problemo.wav",
       "Image": "arnold no problemo.png",
-      "Video": "thumbsup.mp4"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "Arnold No Problemo.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "thumbsup.mp4"
+        }
+      ]
     },
     {
       "TheKey": "NumPad3",
       "Title": "Brain Ponder",
-      "Audio": "Brain Ponder.wav",
-      "Image": "",
-      "Video": "burst.mp4"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "Brain Ponder.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "burst.mp4"
+        }
+      ]
     },
     {
       "TheKey": "NumPad4",
       "Title": "Pinky Alright",
-      "Audio": "Pinky Alright.wav",
-      "Image": ""
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "Pinky Alright.wav"
+        }
+      ]
     },
     {
       "Title": "Think McFly",
-      "Audio": "thinkmcfly.wav"
-    },
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "thinkmcfly.wav"
+        }
+      ]
+    }
+  ]
+}
+
+/*
+  ,
     {
       "Title": "Sad Trombone",
       "Audio": "sadtrombone.wav"
@@ -211,5 +257,4 @@
       "Video": "thanksforwatching.mp4",
       "Color": "#8888ff"
     }
-  ]
-}
+*/
