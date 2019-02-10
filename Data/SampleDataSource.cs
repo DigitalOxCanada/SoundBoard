@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using SoundBoardWPF.Views;
+using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace SoundBoardWPF
+namespace SoundBoardWPF.Data
 {
     class SampleDataSource
     {

@@ -8,6 +8,7 @@ Live Coding Session to convert .Net Framework WPF version of app into a .Net Cor
 - Global HotKey so even when the app isn't in focus the HotKey will activate the action.
 - Can be Audio files & green screen video files.
 - Can use with any streaming service.
+- Built in editor with paste image from clipboard, drag and drop media files
 
 # How to use Video
 1) Create or find a video that has green screen background and add it into your theme.

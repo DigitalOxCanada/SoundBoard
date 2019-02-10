@@ -1,46 +1,38 @@
-﻿using GlobalHotKey;
+﻿using ColorPickerWPF;
+using GlobalHotKey;
+using Microsoft.Win32;
 using NAudio.Wave;
 using Newtonsoft.Json;
+using SoundBoardWPF.ViewModels;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace SoundBoardWPF
+namespace SoundBoardWPF.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        //TODO editor mode
-        //TODO change wrapPanel to be databound to list instead of manual data
         //TODO allow drag and drop of media files onto buttons while in edit mode
-        //TODO wire up menu items
         //TODO add functionality to stop video and audio currently playing
         //TODO change themes from within the gui
         //TODO varied sizes of buttons defined in the theme file (can't with wrap grid so what is alternative)
-        //TODO xaml template for look and feel of the buttons (font size, colour, etc.)
-        //TODO use databinding on button props
-        HotKeyManager hotKeyManager = new HotKeyManager();
+        readonly HotKeyManager hotKeyManager = new HotKeyManager();
         WaveOutEvent outputDevice;
         AudioFileReader audioFile;
 
-        private SubWindow subWindow = new SubWindow();
+        private readonly SubWindow subWindow = new SubWindow();
 
         public MyViewModel myViewModel { get; set; }
 
-        App myApp;
+        readonly App myApp;
 
 
         /// <summary>
@@ -66,7 +58,7 @@ namespace SoundBoardWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PlaySoundButton_Click(object sender, RoutedEventArgs e)
+        private void PlayActionButton_Click(object sender, RoutedEventArgs e)
         {
             ActionButton btn = (ActionButton)sender;
             PlaySound(btn.Audio);
@@ -181,15 +173,19 @@ namespace SoundBoardWPF
 
         private void Exit_MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            //TODO detect if changes were made and save theme
             myApp.Shutdown();
         }
 
         private void Edit_NewActionButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO add a blank new action button the scene
+            //add a blank new action button the scene
             ActionButton btn = new ActionButton();
             btn.Title = "New";
             myViewModel.ActionButtons.Add(btn);
+            btn.UpdateMedia();
+            WireUpActionButton(btn);
+            myViewModel.SelectedActionButton = btn;
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
@@ -223,81 +219,14 @@ namespace SoundBoardWPF
             //for each button assign the hotkey and create the visual button with details
             foreach (var btn in myViewModel.ActionButtons)
             {
-                bool AudioFileExists = false;
-                bool VideoFileExists = false;
-
-
-                if (!String.IsNullOrEmpty(btn.Audio))
+                //load up images on buttons
+                btn.UpdateMedia();
+                WireUpActionButton(btn);
+                if (btn.TheKey != null)
                 {
-                    if (System.IO.File.Exists($"{myApp.selectedThemePath}/{btn.Audio}"))
-                    {
-                        AudioFileExists = true;
-                    }
+                    btn.TheHotKey = hotKeyManager.Register((Key)btn.TheKey, ModifierKeys.Control | ModifierKeys.Alt);
                 }
-
-                if (!String.IsNullOrEmpty(btn.Video))
-                {
-                    if (System.IO.File.Exists($"{myApp.selectedThemePath}/{btn.Video}"))
-                    {
-                        VideoFileExists = true;
-                        btn.imgVideo.Visibility = Visibility.Visible;
-                    }
-                }
-                else
-                {
-                    btn.imgVideo.Visibility = Visibility.Hidden;
-                }
-
-                if (!string.IsNullOrEmpty(btn.Color))
-                {
-                    //newButton.Background = new SolidColorBrush(Colors.AliceBlue);
-                    var color = (Color)ColorConverter.ConvertFromString(btn.Color);
-                    btn.Background = new SolidColorBrush(color);
-                }
-
-
-                if (AudioFileExists | VideoFileExists)
-                {
-                    //only wire up the hotkey if one is specified and that there is something to play (audio or video), otherwise the user must click the button
-                    if (btn.TheKey != null)
-                    {
-                        btn.TheHotKey = hotKeyManager.Register((Key)btn.TheKey, ModifierKeys.Control | ModifierKeys.Alt);
-                    }
-                }
-                else
-                {
-                    btn.IsEnabled = false;
-                }
-
-                //if Title is blank for some reason then set it to the audio filename
-                if (string.IsNullOrEmpty(btn.Title))
-                {
-                    btn.Title = btn.Audio;
-                }
-
-
-                ImageBrush brush = new ImageBrush();
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                string img = "nopic.png";
-
-                //only if image is specified we try to load the image, if no image we use default nopic.png
-                if (!String.IsNullOrEmpty(btn.Image))
-                {
-                    if (System.IO.File.Exists($"{myApp.selectedThemePath}/{btn.Image}"))
-                    {
-                        img = $"{myApp.selectedThemePath}/{btn.Image}";
-                    }
-                    bitmap.UriSource = new Uri($"{img}", UriKind.Relative);
-                    bitmap.EndInit();
-                    brush.ImageSource = bitmap;
-                    btn.Background = brush;
-                }
-
-                btn.Click += PlaySoundButton_Click;
             }
-
-
 
             hotKeyManager.KeyPressed += HotKeyManagerPressed;
 
@@ -305,7 +234,78 @@ namespace SoundBoardWPF
             {
                 subWindow.Show();
             }
+        }
 
+        private void WireUpActionButton(ActionButton btn)
+        {
+            btn.MouseDoubleClick += PlayActionButton_Click;
+            btn.Click += SelectAction_Click;
+        }
+
+        private void SelectAction_Click(object sender, RoutedEventArgs e)
+        {
+            myViewModel.SelectedActionButton = sender as ActionButton;
+        }
+
+        private void ChangeColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            Color color;
+            bool ok = ColorPickerWindow.ShowDialog(out color);
+            if(ok)
+            {
+                myViewModel.SelectedActionButton.Color = color.ToString();
+            }
+        }
+
+        private void ChangeImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog op = new OpenFileDialog();
+            op.Title = "Select a picture";
+            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+              "Portable Network Graphic (*.png)|*.png";
+            if (op.ShowDialog() == true)
+            {
+                //imgPhoto.Source = new BitmapImage(new Uri(op.FileName));
+                //copy the file from source to the current theme path keeping the filename.
+                string outputFn = System.IO.Path.Combine(myApp.selectedThemePath, System.IO.Path.GetFileName(op.FileName));
+                System.IO.File.Copy(op.FileName, outputFn, true);
+                myViewModel.SelectedActionButton.Image = System.IO.Path.GetFileName(op.FileName);
+            }
+        }
+
+        private void PasteFromClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var imgdata = Clipboard.GetImage();
+                if(imgdata==null) return;
+                string newfilename = myViewModel.SelectedActionButton.Title + ".bmp";
+                string outputFn = System.IO.Path.Combine(myApp.selectedThemePath, newfilename);
+                using (var fileStream = new FileStream(outputFn, FileMode.Create))
+                {
+                    BitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(imgdata));
+                    encoder.Save(fileStream);
+                }
+                myViewModel.SelectedActionButton.Image = newfilename;
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Paste failed", MessageBoxButton.OK);
+            }
+        }
+        private byte[] ObjectToByteArray(Object obj)
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+            BinaryFormatter bf = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+            bf.Serialize(ms, obj);
+            return ms.ToArray();
         }
     }
 }

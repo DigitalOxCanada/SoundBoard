@@ -7,25 +7,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="video-icon.png" />
+    <None Remove="Data\nopic.png" />
+    <None Remove="README.md" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ColorPickerWPF" Version="1.0.9" />
     <PackageReference Include="GlobalHotKey" Version="1.1.0" />
     <PackageReference Include="NAudio" Version="1.8.5" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="video-icon.png">
+    <Resource Include="Views\nopic.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\video-icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="nopic.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="themes\theme1\121gigawatts.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -227,10 +232,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="ActionButton.xaml">
+    <Page Update="Views\ActionButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="SubWindow.xaml">
+    <Page Update="Views\SubWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

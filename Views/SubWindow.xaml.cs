@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace SoundBoardWPF
+namespace SoundBoardWPF.Views
 {
     /// <summary>
     /// Interaction logic for SubWindow.xaml

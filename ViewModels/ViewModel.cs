@@ -1,18 +1,15 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using SoundBoardWPF.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SoundBoardWPF
+namespace SoundBoardWPF.ViewModels
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class MyViewModel : INotifyPropertyChanged
     {
         private string themeName;
+        private ActionButton selectedActionButton;
 
         [JsonProperty]
         public string ThemeName
@@ -24,6 +21,18 @@ namespace SoundBoardWPF
                 {
                     this.themeName = value;
                     OnPropertyChanged("ThemeName");
+                }
+            }
+        }
+
+        public ActionButton SelectedActionButton {
+            get { return selectedActionButton; }
+            set
+            {
+                if (value != this.selectedActionButton)
+                {
+                    this.selectedActionButton = value;
+                    OnPropertyChanged("SelectedActionButton");
                 }
             }
         }

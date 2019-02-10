@@ -1,0 +1,25 @@
+﻿<Button x:Class="SoundBoardWPF.Views.ActionButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SoundBoardWPF"
+            xmlns:localc="clr-namespace:SoundBoardWPF.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100" Margin="5" DataContext="{Binding Mode=OneWay, NotifyOnSourceUpdated=True, RelativeSource={RelativeSource Self}}" 
+        AllowDrop="True" 
+        Drop="Button_Drop"
+        BorderBrush="{Binding Path=Color,Converter={StaticResource ColorToBrushConverter}}"
+        BorderThickness="2"
+        >
+    <Button.Resources>
+    </Button.Resources>
+    <Grid Width="90" Height="90" Background="{Binding Path=Image,Mode=OneWay,Converter={StaticResource ImageToBrushConverter}}">
+
+        <StackPanel Name="stackPanel">
+            <TextBlock Name="txtRow1" HorizontalAlignment="Center" Margin="0,0,0,15" TextWrapping="Wrap" Foreground="Black" Background="#88FFFFFF" Text="{Binding Path=Title, TargetNullValue='?'}"></TextBlock>
+            <TextBlock Name="txtRow2" HorizontalAlignment="Center" FontSize="16" Background="#CCFFFFFF" Text="{Binding TheKey,Mode=OneWay,Converter={StaticResource enumItemsConverter}}"></TextBlock>
+        </StackPanel>
+        <Image Name="imgVideo" Source="video-icon.png" Stretch="None" Margin="35,35,-35,-35" Visibility="{Binding IsVideo}" />
+    </Grid>
+</Button>
