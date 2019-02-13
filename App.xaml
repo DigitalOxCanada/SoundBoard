@@ -5,10 +5,20 @@
              xmlns:localc="clr-namespace:SoundBoardWPF.Converters"
              Startup="Application_Startup" Exit="Application_Exit">
     <Application.Resources>
-        <localc:EnumToStringConverter x:Key="enumItemsConverter"/>
-        <localc:ColorStringToBrushConverter x:Key="ColorToBrushConverter"/>
-        <localc:ImageToBrushConverter x:Key="ImageToBrushConverter"/>
-        <localc:ObjectIsNullConverter x:Key="ObjectIsNullConverter"/>
-        <localc:HiddenIfNullConverter x:Key="HiddenIfNullConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/SoundBoardWPF;component/Resources/Resources.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/SoundBoardWPF;component/Resources/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <localc:EnumToStringConverter x:Key="enumItemsConverter"/>
+            <localc:ColorStringToBrushConverter x:Key="ColorToBrushConverter"/>
+            <localc:ImageToBrushConverter x:Key="ImageToBrushConverter"/>
+            <localc:ObjectIsNullConverter x:Key="ObjectIsNullConverter"/>
+            <localc:HiddenIfNullConverter x:Key="HiddenIfNullConverter"/>
+            <localc:ImageSourceConverter x:Key="ImageSourceConverter"/>
+            <localc:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Hidden"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
+

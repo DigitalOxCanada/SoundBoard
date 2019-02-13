@@ -79,182 +79,430 @@
           "Data": "thinkmcfly.wav"
         }
       ]
-    }
-  ]
-}
-
-/*
-  ,
-    {
-      "Title": "Sad Trombone",
-      "Audio": "sadtrombone.wav"
     },
     {
-      "Title": "Lose Tuba",
-      "Audio": "LoseTuba.wav"
+      "Title": "Sad Trombone",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "sadtrombone.wav"
+        }
+      ]
+    },
+    {
+      "Title": "Lose Tubs",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "LoseTuba.wav"
+        }
+      ]
     },
     {
       "Title": "121 Gigawatts",
-      "Audio": "121gigawatts.wav",
-      "Video": "Particles Effects.mp4"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "121gigawatts.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "Particles Effects.mp4"
+        }
+      ]
     },
     {
       "Title": "Entry in 45s",
-      "Audio": "45secnds.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "45secnds.wav"
+        }
+      ]
     },
     {
-      "Title": "Airplace Nervous",
-      "Audio": "ap2.wav"
+      "Title": "Airplane Nervous",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "ap2.wav"
+        }
+      ]
     },
     {
       "Title": "BRB",
-      "Audio": "brb.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "brb.wav"
+        }
+      ]
     },
     {
       "Title": "Successful broadcast",
-      "Audio": "Brodcast.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "Brodcast.wav"
+        }
+      ]
     },
     {
       "Title": "2001 can't do that",
-      "Audio": "cantdo.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "cantdo.wav"
+        }
+      ]
     },
     {
       "Title": "Daves Not Here",
-      "Audio": "davesnot.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "davesnot.wav"
+        }
+      ]
     },
     {
       "Title": "2001 human error",
-      "Audio": "error.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "error.wav"
+        }
+      ]
     },
     {
       "Title": "2001 All functional",
-      "Audio": "function.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "function.wav"
+        }
+      ]
     },
     {
       "Title": "Bruce Almighty Gibberish",
-      "Audio": "gibberish.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "gibberish.wav"
+        }
+      ]
+    },
+    {
+      "Title": "GitHub",
+      "Actions": [
+        {
+          "Action": "URL",
+          "Data": "https://github.com/digitaloxcanada"
+        }
+      ]
     },
     {
       "Title": "Hasta La Vista Baby",
-      "Audio": "hasta.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "hasta.wav"
+        }
+      ]
     },
     {
       "Title": "High Noon Whistle",
-      "Audio": "HighNoonWhistle.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "HighNoonWhistle.wav"
+        }
+      ]
     },
     {
-      "Title": "Holy Shnikes - C.Farley",
-      "Audio": "holyshnikes.wav"
+      "Title": "Holy Shnikes (CFarley)",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "holyshnikes.wav"
+        }
+      ]
     },
     {
-      "Title": "Holy Shnikes2 - C.Farley",
-      "Audio": "holyshnikes2.wav"
+      "Title": "Holy Shnikes2 (CFarley)",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "holyshnikes2.wav"
+        }
+      ]
     },
     {
-      "Title": "Houston we have problem",
-      "Audio": "housprob.wav"
+      "Title": "Houstan have problem",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "housprob.wav"
+        }
+      ]
     },
     {
-      "Title": "Inception hum",
-      "Audio": "inception.wav"
+      "Title": "Its Alive (CFarley)",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "itsalive.wav"
+        }
+      ]
     },
     {
-      "Title": "Its Alive! C.Farley",
-      "Audio": "itsalive.wav"
+      "Title": "Inception",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "inception.wav"
+        }
+      ]
     },
     {
       "Title": "Drum sting",
-      "Audio": "jokesting.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "jokesting.wav"
+        }
+      ]
     },
     {
       "Title": "2001 just 1 moment",
-      "Audio": "just1mom.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "just1mom.wav"
+        }
+      ]
     },
     {
       "Title": "Go for launch",
-      "Audio": "launch.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "launch.wav"
+        }
+      ]
     },
     {
       "Title": "Dodge This",
-      "Audio": "matrix20.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "matrix20.wav"
+        }
+      ]
     },
     {
-      "Title": "Tank, load us up",
-      "Audio": "matrix43.wav"
+      "Title": "Tank load us up",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "matrix43.wav"
+        }
+      ]
     },
     {
       "Title": "There is no spoon",
-      "Audio": "matrix55.wav",
-      "Video": "nospoon.mp4"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "matrix55.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "nospoon.mp4"
+        }
+      ]
     },
     {
       "Title": "Bring out ur dead",
-      "Audio": "mp2.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "mp2.wav"
+        }
+      ]
     },
     {
       "Title": "NOT",
-      "Audio": "not.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "not.wav"
+        }
+      ]
     },
     {
       "Title": "Schwing",
-      "Audio": "schwing.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "schwing.wav"
+        }
+      ]
     },
     {
       "Title": "Schwing 2 ppl",
-      "Audio": "schwing2.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "schwing2.wav"
+        }
+      ]
     },
     {
       "Title": "Slow Clap",
-      "Audio": "SlowClap.wav"
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "SlowClap.wav"
+        }
+      ]
     },
     {
-      "Title": "Sweet",
-      "Audio": "sweet.wav"
+      "Title": "sweet",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "sweet.wav"
+        }
+      ]
     },
     {
-      "Audio": "rewind.wav",
-      "Video": "rewind.mp4"
+      "Title": "Rewind",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "rewind.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "rewind.mp4"
+        }
+      ]
     },
     {
-      "Audio": "chime.wav"
+      "Title": "Chime",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "chime.wav"
+        }
+      ]
     },
     {
-      "Audio": "run.wav",
-      "Video": "run.mp4"
+      "Title": "RUN",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "run.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "run.mp4"
+        }
+      ]
     },
     {
-      "Audio": "johncena.wav",
-      "Video": "johncena.mp4"
+      "Title": "John Cena",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "johncena.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "johncena.mp4"
+        }
+      ]
     },
     {
-      "Audio": "crickets.wav"
+      "Title": "Crickets",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "crickets.wav"
+        }
+      ]
     },
     {
-      "Audio": "wrongbuzzer.wav"
+      "Title": "Wrong Buzzer",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "wrongbuzzer.wav"
+        }
+      ]
     },
     {
-      "Audio": "xfiles.wav"
+      "Title": "xfiles",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "xfiles.wav"
+        }
+      ]
     },
     {
-      "Audio": "funsong.wav",
-      "Video": "funsong.mp4"
+      "Title": "Skeleton fun song",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "funsong.wav"
+        },
+        {
+          "Action": "funsong.wav",
+          "Data": "funsong.mp4"
+        }
+      ]
     },
     {
-      "Audio": "readytorumble.wav"
+      "Title": "Ready to rumble",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "readytorumble.wav"
+        }
+      ]
     },
     {
-      "Title": "",
-      "Audio": "soundofpolice.wav",
-      "Color": "#cc3333"
+      "Title": "Sound of Police",
+      "Color": "#8888ff",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "soundofpolice.wav"
+        }
+      ]
     },
     {
-      "Title": "Follow Me",
-      "Video": "followme.mp4",
-      "Color": "#8888ff"
+      "Title": "Follow me",
+      "Color": "#8888ff",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "followme.mp4"
+        }
+      ]
     },
     {
       "Title": "Thanks for watching",
-      "Video": "thanksforwatching.mp4",
-      "Color": "#8888ff"
+      "Color": "#8888ff",
+      "Actions": [
+        {
+          "Action": "PlayMedia",
+          "Data": "thanksforwatching.mp4"
+        }
+      ]
     }
-*/
+
+  ]
+}

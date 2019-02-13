@@ -28,7 +28,6 @@ namespace SoundBoardWPF.Views
 
         public SubWindow subWindow;
 
-        public MyViewModel myViewModel { get; set; }
 
         readonly App myApp;
 
@@ -38,10 +37,10 @@ namespace SoundBoardWPF.Views
         /// </summary>
         public MainWindow()
         {
-            myViewModel = new MyViewModel();
-            subWindow = new SubWindow();
-            DataContext = myViewModel;
             myApp = (App)Application.Current;
+            myApp.myViewModel = new MyViewModel();
+            subWindow = new SubWindow();
+            DataContext = myApp.myViewModel;
 
             InitializeComponent();
 
@@ -54,6 +53,46 @@ namespace SoundBoardWPF.Views
 
 
 
+        private void LoadTheme()
+        {
+            string json = File.ReadAllText($"{myApp.SelectedThemePath}/{myApp.selectedThemeName}.json");
+
+            //deserialize the json theme information
+            myApp.myViewModel = JsonConvert.DeserializeObject<MyViewModel>(json);
+            DataContext = myApp.myViewModel;
+
+            //for each button assign the hotkey and create the visual button with details
+            foreach (var btn in myApp.myViewModel.ActionButtons)
+            {
+                //load up images on buttons
+                btn.UpdateMedia();
+                WireUpActionButton(btn);
+                if (btn.TheKey != null)
+                {
+                    btn.TheHotKey = hotKeyManager.Register((Key)btn.TheKey, ModifierKeys.Control | ModifierKeys.Alt);
+                }
+            }
+
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            //TODO search for available themes in output folder (themes/themename/themename.json)
+
+            //TODO if there is only 1 theme then just automatically use it, otherwise maybe prompt for which one?
+
+            LoadTheme();
+
+            hotKeyManager.KeyPressed += HotKeyManagerPressed;
+
+            if (myApp.ShowVideos)
+            {
+                subWindow.Show();
+            }
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -61,7 +100,7 @@ namespace SoundBoardWPF.Views
         /// <param name="e"></param>
         private void HotKeyManagerPressed(object sender, KeyPressedEventArgs e)
         {
-            var btn = (from p in myViewModel.ActionButtons where p.TheKey == e.HotKey.Key select p).SingleOrDefault();
+            var btn = (from p in myApp.myViewModel.ActionButtons where p.TheKey == e.HotKey.Key select p).SingleOrDefault();
             if (btn != null)
             {
                 //PlaySound(btn.Audio);
@@ -79,7 +118,7 @@ namespace SoundBoardWPF.Views
         {
 
             // Unregister Ctrl+Alt+Key hotkey.
-            foreach (var btn in myViewModel.ActionButtons)
+            foreach (var btn in myApp.myViewModel.ActionButtons)
             {
                 if (btn.TheHotKey != null)
                 {
@@ -113,7 +152,6 @@ namespace SoundBoardWPF.Views
 
         private void Exit_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //TODO detect if changes were made and save theme
             myApp.Shutdown();
         }
 
@@ -122,10 +160,10 @@ namespace SoundBoardWPF.Views
             //add a blank new action button the scene
             ActionButton btn = new ActionButton();
             btn.Title = "New";
-            myViewModel.ActionButtons.Add(btn);
+            myApp.myViewModel.ActionButtons.Add(btn);
             btn.UpdateMedia();
             WireUpActionButton(btn);
-            myViewModel.SelectedActionButton = btn;
+            myApp.myViewModel.SelectedActionButton = btn;
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
@@ -138,38 +176,6 @@ namespace SoundBoardWPF.Views
             myApp.IsEditModeActive = false;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
-            //TODO search for available themes in output folder (themes/themename/themename.json)
-
-            //TODO if there is only 1 theme then just automatically use it, otherwise maybe prompt for which one?
-
-            string json = System.IO.File.ReadAllText($"{myApp.SelectedThemePath}/{myApp.selectedThemeName}.json");
-
-            //deserialize the json theme information
-            myViewModel = JsonConvert.DeserializeObject<MyViewModel>(json);
-            DataContext = myViewModel;
-
-            //for each button assign the hotkey and create the visual button with details
-            foreach (var btn in myViewModel.ActionButtons)
-            {
-                //load up images on buttons
-                btn.UpdateMedia();
-                WireUpActionButton(btn);
-                if (btn.TheKey != null)
-                {
-                    btn.TheHotKey = hotKeyManager.Register((Key)btn.TheKey, ModifierKeys.Control | ModifierKeys.Alt);
-                }
-            }
-
-            hotKeyManager.KeyPressed += HotKeyManagerPressed;
-
-            if (myApp.ShowVideos)
-            {
-                subWindow.Show();
-            }
-        }
 
         private void WireUpActionButton(ActionButton btn)
         {
@@ -179,7 +185,7 @@ namespace SoundBoardWPF.Views
 
         private void SelectAction_Click(object sender, RoutedEventArgs e)
         {
-            myViewModel.SelectedActionButton = sender as ActionButton;
+            myApp.myViewModel.SelectedActionButton = sender as ActionButton;
         }
 
         private void ChangeColorButton_Click(object sender, RoutedEventArgs e)
@@ -188,7 +194,7 @@ namespace SoundBoardWPF.Views
             bool ok = ColorPickerWindow.ShowDialog(out color);
             if(ok)
             {
-                myViewModel.SelectedActionButton.Color = color.ToString();
+                myApp.myViewModel.SelectedActionButton.Color = color.ToString();
             }
         }
 
@@ -205,7 +211,7 @@ namespace SoundBoardWPF.Views
                 //copy the file from source to the current theme path keeping the filename.
                 string outputFn = System.IO.Path.Combine(myApp.SelectedThemePath, System.IO.Path.GetFileName(op.FileName));
                 System.IO.File.Copy(op.FileName, outputFn, true);
-                myViewModel.SelectedActionButton.Image = System.IO.Path.GetFileName(op.FileName);
+                myApp.myViewModel.SelectedActionButton.Image = System.IO.Path.GetFileName(op.FileName);
             }
         }
 
@@ -215,7 +221,7 @@ namespace SoundBoardWPF.Views
             {
                 var imgdata = Clipboard.GetImage();
                 if(imgdata==null) return;
-                string newfilename = myViewModel.SelectedActionButton.Title + ".bmp";
+                string newfilename = myApp.myViewModel.SelectedActionButton.Title + ".bmp";
                 string outputFn = System.IO.Path.Combine(myApp.SelectedThemePath, newfilename);
                 using (var fileStream = new FileStream(outputFn, FileMode.Create))
                 {
@@ -223,7 +229,7 @@ namespace SoundBoardWPF.Views
                     encoder.Frames.Add(BitmapFrame.Create(imgdata));
                     encoder.Save(fileStream);
                 }
-                myViewModel.SelectedActionButton.Image = newfilename;
+                myApp.myViewModel.SelectedActionButton.Image = newfilename;
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -245,13 +251,13 @@ namespace SoundBoardWPF.Views
 
         private void ItemsPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            myViewModel.SelectedActionButton = null;
+            myApp.myViewModel.SelectedActionButton = null;
         }
 
         private void RemoveAction_Click(object sender, RoutedEventArgs e)
         {
-            myViewModel.ActionButtons.Remove(myViewModel.SelectedActionButton);
-            myViewModel.SelectedActionButton = null;
+            myApp.myViewModel.ActionButtons.Remove(myApp.myViewModel.SelectedActionButton);
+            myApp.myViewModel.SelectedActionButton = null;
         }
     }
 }

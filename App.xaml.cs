@@ -1,5 +1,8 @@
 ﻿using NAudio.Wave;
+using Newtonsoft.Json;
+using SoundBoardWPF.ViewModels;
 using SoundBoardWPF.Views;
+using System.IO;
 using System.Windows;
 
 namespace SoundBoardWPF
@@ -12,6 +15,8 @@ namespace SoundBoardWPF
         public string THEMEFOLDER = "themes";
         public string selectedThemeName = "theme1";
         public string SelectedThemePath { get; set; }
+
+        public MyViewModel myViewModel { get; set; }
 
         public bool ShowVideos { get; set; }
         public bool IsEditModeActive { get; set; }
@@ -82,14 +87,24 @@ namespace SoundBoardWPF
 
             if (audioFile == null)
             {
+                //TODO fix crash if the file doesn't exist
                 audioFile = new AudioFileReader($"{SelectedThemePath}/{audiofn}");
                 outputDevice.Init(audioFile);
             }
             outputDevice.Play();
         }
 
+        public void SaveTheme()
+        {
+            var json = JsonConvert.SerializeObject(myViewModel);
+
+            File.WriteAllText($"{SelectedThemePath}/{selectedThemeName}.json", json);
+        }
+
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            SaveTheme();
+
             outputDevice.Dispose();
             outputDevice = null;
         }

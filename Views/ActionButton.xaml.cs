@@ -1,26 +1,32 @@
 ﻿using GlobalHotKey;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.IO;
 
 namespace SoundBoardWPF.Views
 {
+
     public class ActionBase
     {
         public string Action { get; set; }
         public string Data { get; set; }
     }
+
     /// <summary>
     /// Interaction logic for ActionButton.xaml
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
     public partial class ActionButton : Button, INotifyPropertyChanged
     {
-
         [JsonProperty]
         public ObservableCollection<ActionBase> Actions { get; set; }
 
@@ -61,9 +67,6 @@ namespace SoundBoardWPF.Views
         }
 
 
-        //[JsonProperty]
-        //public string Audio { get; set; }
-
         private string _image;
         [JsonProperty]
         public string Image
@@ -71,9 +74,6 @@ namespace SoundBoardWPF.Views
             get { return _image; }
             set { _image = value; OnPropertyChanged("Image"); }
         }
-
-        //[JsonProperty]
-        //public string Video { get; set; }
 
         private string _color;
 
@@ -91,18 +91,20 @@ namespace SoundBoardWPF.Views
             }
         }
 
-//        public Visibility IsVideo { get { if (Video != null) return Visibility.Visible; else return Visibility.Hidden; } }
+        public bool HasVideo { get { return hasVideo; } set { hasVideo = value; OnPropertyChanged("HasVideo"); } }
 
         public HotKey TheHotKey { get; set; }
 
         private App myApp;
+        private bool hasVideo;
 
         public ActionButton()
         {
             InitializeComponent();
 
-            myApp = (App)Application.Current;
+            Actions = new ObservableCollection<ActionBase>();
 
+            myApp = (App)Application.Current;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -116,84 +118,68 @@ namespace SoundBoardWPF.Views
             }
         }
 
+        string[] SupportedVideoExtensions = new string[] { ".mpg", ".mpeg", ".wmv", ".mp4" };
+
         public void UpdateMedia()
         {
-            //bool AudioFileExists = false;
-            //bool VideoFileExists = false;
+            //imgVideo.Visibility = Visibility.Hidden;
 
-            imgVideo.Visibility = Visibility.Hidden;
-
-            //if (!String.IsNullOrEmpty(Audio))
-            //{
-            //    if (System.IO.File.Exists($"{myApp.selectedThemePath}/{Audio}"))
-            //    {
-            //        AudioFileExists = true;
-            //    }
-            //}
-
-            //if (!String.IsNullOrEmpty(Video))
-            //{
-            //    if (System.IO.File.Exists($"{myApp.selectedThemePath}/{Video}"))
-            //    {
-            //        VideoFileExists = true;
-            //        imgVideo.Visibility = Visibility.Visible;
-            //    }
-            //}
-            //else
-            //{
-            //    imgVideo.Visibility = Visibility.Hidden;
-            //}
+            foreach(var action in Actions)
+            {
+                if(action.Action == "PlayMedia")
+                {
+                    if(SupportedVideoExtensions.Contains(Path.GetExtension(action.Data))) 
+                    {
+                        HasVideo = true;
+                    }
+                }
+            }
 
 
-            //if (string.IsNullOrEmpty(Title) && !string.IsNullOrEmpty(Audio))
-            //{
-            //    Title = Audio;
-            //}
-            if(string.IsNullOrEmpty(Title))
+            if (string.IsNullOrEmpty(Title))
             {
                 Title = "No Title";
             }
-
         }
 
-        private void Button_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                // Note that you can have more than one file.
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                string file = files[0];
+//        private void Button_Drop(object sender, DragEventArgs e)
+//        {
+//            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+//            {
+//                // Note that you can have more than one file.
+//                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+//                string file = files[0];
 
-                //copy the file from source to the current theme path keeping the filename.
-                System.IO.File.Copy(file, System.IO.Path.Combine(((App)Application.Current).SelectedThemePath, System.IO.Path.GetFileName(file)), true);
+//                //copy the file from source to the current theme path keeping the filename.
+//                System.IO.File.Copy(file, System.IO.Path.Combine(((App)Application.Current).SelectedThemePath, System.IO.Path.GetFileName(file)), true);
 
-                //TODO move the file to the current theme path
-                //TODO associate the file to image or video or audio depending on extension.
-                switch (System.IO.Path.GetExtension(file).ToLower())
-                {
-                    //audio
-                    case ".wav":
-                    case ".mp3":
-//                        Audio = System.IO.Path.GetFileName(file);
-                        break;
+//                //TODO move the file to the current theme path
+//                //TODO associate the file to image or video or audio depending on extension.
+//                switch (System.IO.Path.GetExtension(file).ToLower())
+//                {
+//                    //audio
+//                    case ".wav":
+//                    case ".mp3":
+////                        Audio = System.IO.Path.GetFileName(file);
+//                        break;
 
-                    //video
-                    case ".mpg":
-                    case ".mpeg":
-                    case ".wmv":
-                    case ".mp4":
-//                        Video = System.IO.Path.GetFileName(file);
-                        break;
+//                    //video
+//                    case ".mpg":
+//                    case ".mpeg":
+//                    case ".wmv":
+//                    case ".mp4":
+////                        Video = System.IO.Path.GetFileName(file);
+//                        break;
 
-                    //image
-                    case ".jpg":
-                    case ".jpeg":
-                    case ".png":
-                        //TODO add background brush
-                        break;
-                }
-            }
-        }
+//                    //image
+//                    case ".jpg":
+//                    case ".jpeg":
+//                    case ".png":
+//                        //TODO add background brush
+//                        break;
+//                }
+//            }
+//        }
 
         private void Button_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -220,8 +206,43 @@ namespace SoundBoardWPF.Views
                                 break;
                         }
                         break;
+
+                    case "URL":
+                        OpenUrl(action.Data);
+                        break;
                 }
             }
         }
+
+        private void OpenUrl(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
     }
+
 }
