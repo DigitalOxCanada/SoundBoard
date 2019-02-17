@@ -12,11 +12,12 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.IO;
 
-namespace SoundBoardWPF.Views
+namespace DigitalOx.SoundBoard.Views
 {
 
     public class ActionBase
     {
+        public bool IsPlugin { get; set; }
         public string Action { get; set; }
         public string Data { get; set; }
     }
@@ -181,67 +182,78 @@ namespace SoundBoardWPF.Views
 //            }
 //        }
 
-        private void Button_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void Button_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ActionButton btn = (ActionButton)sender;
+
             foreach(var action in btn.Actions)
             {
-                switch(action.Action)
+                if (action.IsPlugin)
                 {
-                    case "PlayMedia":
-                        switch (System.IO.Path.GetExtension(action.Data).ToLower())
-                        {
-                            //audio
-                            case ".wav":
-                            case ".mp3":
-                                myApp.PlaySound(action.Data);
-                                break;
-
-                            //video
-                            case ".mpg":
-                            case ".mpeg":
-                            case ".wmv":
-                            case ".mp4":
-                                myApp.PlayVideo(action.Data);
-                                break;
-                        }
-                        break;
-
-                    case "URL":
-                        OpenUrl(action.Data);
-                        break;
-                }
-            }
-        }
-
-        private void OpenUrl(string url)
-        {
-            try
-            {
-                Process.Start(url);
-            }
-            catch
-            {
-                // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    Process.Start("xdg-open", url);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Process.Start("open", url);
+                    //deal with plugin
+                    var p = (from plugin in myApp.Plugins where plugin.GetType().Name == action.Action && plugin.IsEnabled select plugin).SingleOrDefault();
+                    if(p!=null)
+                    {
+                        var ret = await p.DoWorkAsync(action.Data);
+                    }
                 }
                 else
                 {
-                    throw;
+                    //no plugin, so just process action directly.
+
+                    switch (action.Action)
+                    {
+                        case "PlayMedia":
+                            switch (System.IO.Path.GetExtension(action.Data).ToLower())
+                            {
+                                //audio
+                                case ".wav":
+                                case ".mp3":
+                                    myApp.PlaySound(action.Data);
+                                    break;
+
+                                //video
+                                case ".mpg":
+                                case ".mpeg":
+                                case ".wmv":
+                                case ".mp4":
+                                    myApp.PlayVideo(action.Data);
+                                    break;
+                            }
+                            break;
+                    }
                 }
             }
         }
+
+        //private void OpenUrl(string url)
+        //{
+        //    try
+        //    {
+        //        Process.Start(url);
+        //    }
+        //    catch
+        //    {
+        //        // hack because of this: https://github.com/dotnet/corefx/issues/10361
+        //        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        //        {
+        //            url = url.Replace("&", "^&");
+        //            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        //        }
+        //        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        //        {
+        //            Process.Start("xdg-open", url);
+        //        }
+        //        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        //        {
+        //            Process.Start("open", url);
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //}
 
     }
 

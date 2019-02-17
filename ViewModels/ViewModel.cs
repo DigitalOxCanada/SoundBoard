@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
-using SoundBoardWPF.Views;
+using DigitalOx.SoundBoard.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace SoundBoardWPF.ViewModels
+namespace DigitalOx.SoundBoard.ViewModels
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class MyViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
         private string themeName;
         private ActionButton selectedActionButton;
@@ -40,7 +40,7 @@ namespace SoundBoardWPF.ViewModels
         [JsonProperty]
         public ObservableCollection<ActionButton> ActionButtons { get; set; }
 
-        public MyViewModel()
+        public MainViewModel()
         {
             //ThemeName = "unknown";
             //ActionButtons = new ObservableCollection<ActionButton>()

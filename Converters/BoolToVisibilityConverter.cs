@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Data;
 
-namespace SoundBoardWPF.Converters
+namespace DigitalOx.SoundBoard.Converters
 {
     [ValueConversion(typeof(bool), typeof(Visibility))]
     public sealed class BoolToVisibilityConverter : IValueConverter

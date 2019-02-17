@@ -1,14 +1,13 @@
-﻿<Application x:Class="SoundBoardWPF.App"
+﻿<Application x:Class="DigitalOx.SoundBoard.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SoundBoardWPF"
-             xmlns:localc="clr-namespace:SoundBoardWPF.Converters"
+             xmlns:localc="clr-namespace:DigitalOx.SoundBoard.Converters"
              Startup="Application_Startup" Exit="Application_Exit">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/SoundBoardWPF;component/Resources/Resources.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/SoundBoardWPF;component/Resources/Styles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DigitalOx.SoundBoard;component/Resources/Resources.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DigitalOx.SoundBoard;component/Resources/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <localc:EnumToStringConverter x:Key="enumItemsConverter"/>

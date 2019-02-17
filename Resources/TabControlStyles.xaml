@@ -3,7 +3,7 @@
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:Actions="clr-namespace:SoundBoardWPF">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/SoundBoardWPF;component/Resources/Resources.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/DigitalOx.SoundBoard;component/Resources/Resources.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type TabControl}" x:Key="StandardTabControl">
         <Style.Resources>

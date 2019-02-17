@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace SoundBoardWPF.Converters
+namespace DigitalOx.SoundBoard.Converters
 {
     public class ObjectIsNullConverter : IValueConverter
     {

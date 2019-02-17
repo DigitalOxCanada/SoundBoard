@@ -196,8 +196,9 @@
       "Title": "GitHub",
       "Actions": [
         {
-          "Action": "URL",
-          "Data": "https://github.com/digitaloxcanada"
+          "IsPlugin": true,
+          "Action": "ActionURL",
+          "Data": "{URL:'https://github.com/digitaloxcanada'}"
         }
       ]
     },
@@ -249,6 +250,11 @@
     {
       "Title": "Its Alive (CFarley)",
       "Actions": [
+        {
+          "IsPlugin": true,
+          "Action": "ActionDelay",
+          "Data": "{Duration:5000}"
+        },
         {
           "Action": "PlayMedia",
           "Data": "itsalive.wav"
@@ -448,6 +454,10 @@
         {
           "Action": "PlayMedia",
           "Data": "xfiles.wav"
+        },
+        {
+          "Action": "PlayMedia",
+          "Data": "meteor.mp4"
         }
       ]
     },
@@ -459,7 +469,7 @@
           "Data": "funsong.wav"
         },
         {
-          "Action": "funsong.wav",
+          "Action": "PlayMedia",
           "Data": "funsong.mp4"
         }
       ]
@@ -503,6 +513,28 @@
         }
       ]
     }
-
+    /*
+    ,
+    {
+      "Title": "Change Res 1024x768",
+      "Actions": [
+        {
+          "IsPlugin": true,
+          "Action": "ActionResolution",
+          "Data": "{Mode:34,Width:1024,Height:768}"
+        }
+      ]
+    },
+    {
+      "Title": "Change Res 1920x1080",
+      "Actions": [
+        {
+          "IsPlugin": true,
+          "Action": "ActionResolution",
+          "Data": "{Mode:129,Width:1920,Height:1080}"
+        }
+      ]
+    }
+  */
   ]
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace SoundBoardWPF.Converters
+namespace DigitalOx.SoundBoard.Converters
 {
     public class ColorStringToBrushConverter : IValueConverter
     {

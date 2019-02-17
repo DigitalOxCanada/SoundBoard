@@ -4,11 +4,23 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <RootNamespace>DigitalOx.SoundBoard</RootNamespace>
+    <AssemblyName>DigitalOx.SoundBoard</AssemblyName>
+    <Company>DigitalOx</Company>
+    <Product>SoundBoardWPF</Product>
+    <Authors>Perry@DigitalOx</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Data\nopic.png" />
     <None Remove="README.md" />
+    <None Remove="Views\MainWindowView.xaml" />
+    <None Remove="Views\splashscreen.jpg" />
+    <None Remove="Views\SubWindowView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,12 +35,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Plugins\IPlugin\IPlugin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Views\nopic.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Views\splashscreen.jpg" />
     <Resource Include="Views\video-icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -158,6 +175,9 @@
     <None Update="themes\theme1\matrix55.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="themes\theme1\meteor.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="themes\theme1\mp2.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -281,7 +301,10 @@
     <Page Update="Views\ActionButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Views\SubWindow.xaml">
+    <Page Update="Views\MainWindowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\SubWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

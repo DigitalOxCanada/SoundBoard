@@ -1,8 +1,8 @@
-﻿using SoundBoardWPF.Views;
+﻿using DigitalOx.SoundBoard.Views;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace SoundBoardWPF.Data
+namespace DigitalOx.SoundBoard.Data
 {
     class SampleDataSource
     {

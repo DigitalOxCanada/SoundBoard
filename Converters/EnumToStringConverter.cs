@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Data;
 
-namespace SoundBoardWPF.Converters
+namespace DigitalOx.SoundBoard.Converters
 {
     public class EnumToStringConverter : IValueConverter
     {
