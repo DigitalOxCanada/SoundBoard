@@ -16,18 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\nopic.png" />
-    <None Remove="README.md" />
-    <None Remove="Views\MainWindowView.xaml" />
-    <None Remove="Views\splashscreen.jpg" />
-    <None Remove="Views\SubWindowView.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="SoundBoard.sln" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ColorPickerWPF" Version="1.0.9" />
     <PackageReference Include="GlobalHotKey" Version="1.1.0" />
     <PackageReference Include="NAudio" Version="1.8.5" />
@@ -41,9 +29,6 @@
   <ItemGroup>
     <Resource Include="Views\nopic.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\splashscreen.jpg" />
     <Resource Include="Views\video-icon.png">
