@@ -8,19 +8,19 @@ namespace DigitalOx.SoundBoard.ViewModels
     [JsonObject(MemberSerialization.OptIn)]
     public class MainViewModel : INotifyPropertyChanged
     {
-        private string themeName;
+        private string profile;
         private ActionButton selectedActionButton;
 
         [JsonProperty]
-        public string ThemeName
+        public string Profile
         {
-            get { return themeName; }
+            get { return profile; }
             set
             {
-                if (value != this.themeName)
+                if (value != this.profile)
                 {
-                    this.themeName = value;
-                    OnPropertyChanged("ThemeName");
+                    this.profile = value;
+                    OnPropertyChanged("Profile");
                 }
             }
         }
@@ -42,16 +42,8 @@ namespace DigitalOx.SoundBoard.ViewModels
 
         public MainViewModel()
         {
-            //ThemeName = "unknown";
-            //ActionButtons = new ObservableCollection<ActionButton>()
-            //{
-            //    new ActionButton { Title = "Action 1" },
-            //    new ActionButton { Title = "Action 2" }
-            //};
-            //ActionButtons[0].TheKey = System.Windows.Input.Key.NumPad0;
-            //ActionButtons[1].TheKey = System.Windows.Input.Key.NumPad1;
-
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -63,5 +55,6 @@ namespace DigitalOx.SoundBoard.ViewModels
                 eventHandler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
     }
 }

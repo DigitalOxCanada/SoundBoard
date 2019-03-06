@@ -6,12 +6,12 @@ namespace DigitalOx.SoundBoard.Data
 {
     class SampleDataSource
     {
-        public string ThemeName { get; set; }
+        public string Profile { get; set; }
         public ObservableCollection<ActionButton> ActionButtons{ get; set; }
 
         public SampleDataSource()
         {
-            ThemeName = "Sample Theme";
+            Profile = "Sample Profile";
 
             ActionButtons = new ObservableCollection<ActionButton>
             {

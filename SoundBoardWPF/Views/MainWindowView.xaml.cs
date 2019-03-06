@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls;
 
 namespace DigitalOx.SoundBoard.Views
 {
@@ -22,8 +23,8 @@ namespace DigitalOx.SoundBoard.Views
     {
         //TODO allow drag and drop of media files onto buttons while in edit mode
         //TODO add functionality to stop video and audio currently playing
-        //TODO change themes from within the gui
-        //TODO varied sizes of buttons defined in the theme file (can't with wrap grid so what is alternative)
+        //TODO change profiles from within the gui
+        //TODO varied sizes of buttons defined in the profile file (can't with wrap grid so what is alternative)
         readonly HotKeyManager hotKeyManager = new HotKeyManager();
 
         public SubWindowView SubWindow { get; set; }
@@ -55,11 +56,11 @@ namespace DigitalOx.SoundBoard.Views
 
 
 
-        private void LoadTheme()
+        private void LoadProfile()
         {
-            string json = File.ReadAllText($"{myApp.SelectedThemePath}/{myApp.selectedThemeName}.json");
+            string json = File.ReadAllText($"{myApp.SelectedProfilePath}/{myApp.selectedProfileName}.json");
 
-            //deserialize the json theme information
+            //deserialize the json profile information
             myApp.mainViewModel = JsonConvert.DeserializeObject<MainViewModel>(json);
             DataContext = myApp.mainViewModel;
 
@@ -80,11 +81,11 @@ namespace DigitalOx.SoundBoard.Views
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
-            //TODO search for available themes in output folder (themes/themename/themename.json)
+            //TODO search for available profiles in output folder (profiles/profilename/profilename.json)
 
-            //TODO if there is only 1 theme then just automatically use it, otherwise maybe prompt for which one?
+            //TODO if there is only 1 profile then just automatically use it, otherwise maybe prompt for which one?
 
-            LoadTheme();
+            LoadProfile();
 
             hotKeyManager.KeyPressed += HotKeyManagerPressed;
 
@@ -210,8 +211,8 @@ namespace DigitalOx.SoundBoard.Views
             if (op.ShowDialog() == true)
             {
                 //imgPhoto.Source = new BitmapImage(new Uri(op.FileName));
-                //copy the file from source to the current theme path keeping the filename.
-                string outputFn = System.IO.Path.Combine(myApp.SelectedThemePath, System.IO.Path.GetFileName(op.FileName));
+                //copy the file from source to the current profile path keeping the filename.
+                string outputFn = System.IO.Path.Combine(myApp.SelectedProfilePath, System.IO.Path.GetFileName(op.FileName));
                 System.IO.File.Copy(op.FileName, outputFn, true);
                 myApp.mainViewModel.SelectedActionButton.Image = System.IO.Path.GetFileName(op.FileName);
             }
@@ -224,7 +225,7 @@ namespace DigitalOx.SoundBoard.Views
                 var imgdata = Clipboard.GetImage();
                 if(imgdata==null) return;
                 string newfilename = myApp.mainViewModel.SelectedActionButton.Title + ".bmp";
-                string outputFn = System.IO.Path.Combine(myApp.SelectedThemePath, newfilename);
+                string outputFn = System.IO.Path.Combine(myApp.SelectedProfilePath, newfilename);
                 using (var fileStream = new FileStream(outputFn, FileMode.Create))
                 {
                     BitmapEncoder encoder = new PngBitmapEncoder();
@@ -256,10 +257,45 @@ namespace DigitalOx.SoundBoard.Views
             myApp.mainViewModel.SelectedActionButton = null;
         }
 
-        private void RemoveAction_Click(object sender, RoutedEventArgs e)
+        private void RemoveActionButton_Click(object sender, RoutedEventArgs e)
         {
             myApp.mainViewModel.ActionButtons.Remove(myApp.mainViewModel.SelectedActionButton);
             myApp.mainViewModel.SelectedActionButton = null;
+        }
+
+        private void NewActionButton_Click(object sender, RoutedEventArgs e)
+        {
+            var nav = new NewActionView();
+            bool? dialogResult = nav.ShowDialog();
+            if(dialogResult==true)
+            {
+                //user clicked the add
+                myApp.mainViewModel.SelectedActionButton.Actions.Add(new ActionBase() { IsPlugin = true, Action = nav.nvm.SelectedPlugin.GetType().Name, Data = nav.nvm.DataTemplateValue });
+            }
+        }
+
+        private void RemovePicture_Click(object sender, RoutedEventArgs e)
+        {
+            myApp.mainViewModel.SelectedActionButton.Image = null;
+        }
+        private void RemoveActionFromButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button cmd = (Button)sender;
+            if (cmd.DataContext is ActionBase)
+            {
+                ActionBase act = (ActionBase)cmd.DataContext;
+                myApp.mainViewModel.SelectedActionButton.Actions.Remove(act);
+            }
+        }
+
+        private async void PlayAction_Click(object sender, RoutedEventArgs e)
+        {
+            Button cmd = (Button)sender;
+            if(cmd.DataContext is ActionBase)
+            {
+                ActionBase act = (ActionBase)cmd.DataContext;
+                await myApp.ExecuteActionAsync(act);
+            }
         }
     }
 }

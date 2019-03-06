@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DigitalOx.SoundBoard
 {
@@ -16,9 +18,9 @@ namespace DigitalOx.SoundBoard
     /// </summary>
     public partial class App : Application, IPluginHost
     {
-        public string THEMEFOLDER = "themes";
-        public string selectedThemeName = "theme1";
-        public string SelectedThemePath { get; set; }
+        public string PROFILEFOLDER = "profiles";
+        public string selectedProfileName = "default";
+        public string SelectedProfilePath { get; set; }
 
         public MainViewModel mainViewModel { get; set; }
 
@@ -34,7 +36,7 @@ namespace DigitalOx.SoundBoard
             var s = new SplashScreen("Views/splashscreen.jpg");
             s.Show(false);
 
-            SelectedThemePath = $"{THEMEFOLDER}/{selectedThemeName}";
+            SelectedProfilePath = $"{PROFILEFOLDER}/{selectedProfileName}";
             ShowVideos = true;
             IsEditModeActive = false;
             ShutdownMode = ShutdownMode.OnMainWindowClose;
@@ -65,7 +67,7 @@ namespace DigitalOx.SoundBoard
             foreach (var pluginFile in pluginFiles)
             {
                 string pluginName = Path.GetFileNameWithoutExtension(pluginFile);
-                if (pluginName=="IPlugin")
+                if (pluginName == "IPlugin")
                 {
                     //skip the Interface dll
                     continue;
@@ -102,7 +104,7 @@ namespace DigitalOx.SoundBoard
                         ip.IsEnabled = true;
                     }
                 }
-                catch(MissingMethodException ex)
+                catch (MissingMethodException ex)
                 {
                     //ignore
                     //this is when it attempts to load the IPlugin.dll which is not an actual plugin, just the interface definition.
@@ -140,7 +142,7 @@ namespace DigitalOx.SoundBoard
 
             if (ShowVideos)
             {
-                ((MainWindowView)MainWindow).SubWindow.LoadVideo($"{SelectedThemePath}/{videofn}");
+                ((MainWindowView)MainWindow).SubWindow.LoadVideo($"{SelectedProfilePath}/{videofn}");
             }
         }
 
@@ -158,22 +160,22 @@ namespace DigitalOx.SoundBoard
             if (audioFile == null)
             {
                 //TODO fix crash if the file doesn't exist
-                audioFile = new AudioFileReader($"{SelectedThemePath}/{audiofn}");
+                audioFile = new AudioFileReader($"{SelectedProfilePath}/{audiofn}");
                 outputDevice.Init(audioFile);
             }
             outputDevice.Play();
         }
 
-        public void SaveTheme()
+        public void SaveProfile()
         {
             var json = JsonConvert.SerializeObject(mainViewModel);
 
-            File.WriteAllText($"{SelectedThemePath}/{selectedThemeName}.json", json);
+            File.WriteAllText($"{SelectedProfilePath}/{selectedProfileName}.json", json);
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            SaveTheme();
+            SaveProfile();
 
             outputDevice.Dispose();
             outputDevice = null;
@@ -182,6 +184,46 @@ namespace DigitalOx.SoundBoard
         public bool Register(IPlugin ipi)
         {
             return true;
+        }
+
+
+        public async Task ExecuteActionAsync(ActionBase action)
+        {
+            if (action.IsPlugin)
+            {
+                //deal with plugin
+                var p = (from plugin in Plugins where plugin.GetType().Name == action.Action && plugin.IsEnabled select plugin).SingleOrDefault();
+                if (p != null)
+                {
+                    var ret = await p.DoWorkAsync(action.Data);
+                }
+            }
+            else
+            {
+                //no plugin, so just process action directly.
+
+                switch (action.Action)
+                {
+                    case "PlayMedia":
+                        switch (System.IO.Path.GetExtension(action.Data).ToLower())
+                        {
+                            //audio
+                            case ".wav":
+                            case ".mp3":
+                                PlaySound(action.Data);
+                                break;
+
+                            //video
+                            case ".mpg":
+                            case ".mpeg":
+                            case ".wmv":
+                            case ".mp4":
+                                PlayVideo(action.Data);
+                                break;
+                        }
+                        break;
+                }
+            }
         }
     }
 }

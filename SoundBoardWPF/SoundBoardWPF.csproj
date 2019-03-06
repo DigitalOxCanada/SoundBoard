@@ -16,8 +16,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\NewActionView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ColorPickerWPF" Version="1.0.9" />
     <PackageReference Include="GlobalHotKey" Version="1.1.0" />
+    <PackageReference Include="gong-wpf-dragdrop" Version="1.1.0" />
     <PackageReference Include="NAudio" Version="1.8.5" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
@@ -37,205 +42,211 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="themes\theme1\121gigawatts.wav">
+    <Compile Update="Views\NewActionView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="profiles\default\121gigawatts.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\45secnds.wav">
+    <None Update="profiles\default\45secnds.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\air horn.png">
+    <None Update="profiles\default\air horn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\Air Horn.wav">
+    <None Update="profiles\default\Air Horn.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\ap2.wav">
+    <None Update="profiles\default\ap2.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\arnold no problemo.png">
+    <None Update="profiles\default\arnold no problemo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\Arnold No Problemo.wav">
+    <None Update="profiles\default\Arnold No Problemo.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\Brain Ponder.wav">
+    <None Update="profiles\default\Brain Ponder.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\brb.wav">
+    <None Update="profiles\default\brb.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\brodcast.wav">
+    <None Update="profiles\default\brodcast.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\burst.mp4">
+    <None Update="profiles\default\burst.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\cantdo.wav">
+    <None Update="profiles\default\cantdo.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\chime.wav">
+    <None Update="profiles\default\chime.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\crickets.wav">
+    <None Update="profiles\default\crickets.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\davesnot.wav">
+    <None Update="profiles\default\davesnot.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\error.wav">
+    <None Update="profiles\default\error.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\fire.mp4">
+    <None Update="profiles\default\fire.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\followme.mp4">
+    <None Update="profiles\default\followme.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\function.wav">
+    <None Update="profiles\default\function.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\funsong.mp4">
+    <None Update="profiles\default\funsong.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\funsong.wav">
+    <None Update="profiles\default\funsong.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\gibberish.wav">
+    <None Update="profiles\default\gibberish.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\hasta.wav">
+    <None Update="profiles\default\hasta.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\HighNoonWhistle.wav">
+    <None Update="profiles\default\HighNoonWhistle.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\holyshnikes.wav">
+    <None Update="profiles\default\holyshnikes.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\holyshnikes2.wav">
+    <None Update="profiles\default\holyshnikes2.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\housprob.wav">
+    <None Update="profiles\default\housprob.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\Inception.wav">
+    <None Update="profiles\default\Inception.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\Inconceivable.png">
+    <None Update="profiles\default\Inconceivable.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\Inconceivable.wav">
+    <None Update="profiles\default\Inconceivable.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\itsalive.wav">
+    <None Update="profiles\default\itsalive.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\johncena.mp4">
+    <None Update="profiles\default\johncena.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\johncena.wav">
+    <None Update="profiles\default\johncena.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\JokeSting.wav">
+    <None Update="profiles\default\JokeSting.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\just1mom.wav">
+    <None Update="profiles\default\just1mom.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\launch.wav">
+    <None Update="profiles\default\launch.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\leftthumbsup.mp4">
+    <None Update="profiles\default\leftthumbsup.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\LoseTuba.wav">
+    <None Update="profiles\default\LoseTuba.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\matrix20.wav">
+    <None Update="profiles\default\matrix20.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\matrix43.wav">
+    <None Update="profiles\default\matrix43.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\matrix55.wav">
+    <None Update="profiles\default\matrix55.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\meteor.mp4">
+    <None Update="profiles\default\meteor.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\mp2.wav">
+    <None Update="profiles\default\mp2.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\nospoon.mp4">
+    <None Update="profiles\default\nospoon.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\not.wav">
+    <None Update="profiles\default\not.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\Particles Effects.mp4">
+    <None Update="profiles\default\Particles Effects.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\Pinky Alright.wav">
+    <None Update="profiles\default\Pinky Alright.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\readytorumble.wav">
+    <None Update="profiles\default\readytorumble.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\rewind-old1.wav">
+    <None Update="profiles\default\rewind-old1.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\rewind.mp4">
+    <None Update="profiles\default\rewind.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\rewind.wav">
+    <None Update="profiles\default\rewind.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\run.mp4">
+    <None Update="profiles\default\run.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\run.wav">
+    <None Update="profiles\default\run.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\SadTrombone.wav">
+    <None Update="profiles\default\SadTrombone.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\santa.mp4">
+    <None Update="profiles\default\santa.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\schwing.wav">
+    <None Update="profiles\default\schwing.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\schwing2.wav">
+    <None Update="profiles\default\schwing2.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\SlowClap.wav">
+    <None Update="profiles\default\SlowClap.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\soundofpolice.wav">
+    <None Update="profiles\default\soundofpolice.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\sweet.wav">
+    <None Update="profiles\default\sweet.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\thanksforwatching.mp4">
+    <None Update="profiles\default\thanksforwatching.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\theme1.json">
+    <None Update="profiles\default\default.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\thinkmcfly.mp4">
+    <None Update="profiles\default\thinkmcfly.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\thinkmcfly.wav">
+    <None Update="profiles\default\thinkmcfly.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\thumbsup.mp4">
+    <None Update="profiles\default\thumbsup.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\wrongbuzzer.wav">
+    <None Update="profiles\default\wrongbuzzer.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="themes\theme1\xfiles.wav">
+    <None Update="profiles\default\xfiles.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -290,6 +301,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\SubWindowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\NewActionView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

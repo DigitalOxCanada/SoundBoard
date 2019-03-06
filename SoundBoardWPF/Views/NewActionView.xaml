@@ -1,0 +1,38 @@
+﻿<Window x:Class="DigitalOx.SoundBoard.Views.NewActionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DigitalOx.SoundBoard.Views"
+             mc:Ignorable="d" 
+            Title="New Action"
+        Width="640" Height="480"
+             d:DesignHeight="480" d:DesignWidth="640" Background="{StaticResource LightBackground}">
+    <StackPanel Orientation="Vertical">
+        <TextBlock HorizontalAlignment="Center" Text="Add New Action"></TextBlock>
+
+        <StackPanel Orientation="Horizontal">
+        <StackPanel HorizontalAlignment="Center" Margin="3" Orientation="Vertical">
+            <TextBlock Margin="3" Text="Actions"></TextBlock>
+            <ListBox Name="PluginsListBox" ItemsSource="{Binding PluginDefList, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="ListBox_MouseDoubleClick">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Path=Plugin.Name}" Grid.Column="0" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+            <StackPanel HorizontalAlignment="Center" Margin="3" Orientation="Vertical">
+                <TextBox Name="tbDataTemplate" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="200" Width="300"></TextBox>
+                <Button HorizontalAlignment="Right" Padding="10" Content="Add" Click="AddButton_Click"></Button>
+            </StackPanel>
+        </StackPanel>
+
+    </StackPanel>
+</Window>

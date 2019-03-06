@@ -20,11 +20,9 @@ Live Coding Session to convert .Net Framework WPF version of app into a .Net Cor
 
 # TODO  
 - Press and hold button to activate action
-- Multi-actions - reorder actions
 - Twitter - change name
 - Twitter - post tweet about going live.
 - Start playing music
-- Change theme to profile
 - Create tabs to hold actions
 - Plugin - play background music
 - Plugin - Play sound effect

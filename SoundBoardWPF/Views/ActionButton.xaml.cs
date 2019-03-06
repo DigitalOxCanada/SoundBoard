@@ -123,8 +123,6 @@ namespace DigitalOx.SoundBoard.Views
 
         public void UpdateMedia()
         {
-            //imgVideo.Visibility = Visibility.Hidden;
-
             foreach(var action in Actions)
             {
                 if(action.Action == "PlayMedia")
@@ -143,118 +141,15 @@ namespace DigitalOx.SoundBoard.Views
             }
         }
 
-//        private void Button_Drop(object sender, DragEventArgs e)
-//        {
-//            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-//            {
-//                // Note that you can have more than one file.
-//                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-//                string file = files[0];
-
-//                //copy the file from source to the current theme path keeping the filename.
-//                System.IO.File.Copy(file, System.IO.Path.Combine(((App)Application.Current).SelectedThemePath, System.IO.Path.GetFileName(file)), true);
-
-//                //TODO move the file to the current theme path
-//                //TODO associate the file to image or video or audio depending on extension.
-//                switch (System.IO.Path.GetExtension(file).ToLower())
-//                {
-//                    //audio
-//                    case ".wav":
-//                    case ".mp3":
-////                        Audio = System.IO.Path.GetFileName(file);
-//                        break;
-
-//                    //video
-//                    case ".mpg":
-//                    case ".mpeg":
-//                    case ".wmv":
-//                    case ".mp4":
-////                        Video = System.IO.Path.GetFileName(file);
-//                        break;
-
-//                    //image
-//                    case ".jpg":
-//                    case ".jpeg":
-//                    case ".png":
-//                        //TODO add background brush
-//                        break;
-//                }
-//            }
-//        }
-
         private async void Button_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ActionButton btn = (ActionButton)sender;
 
             foreach(var action in btn.Actions)
             {
-                if (action.IsPlugin)
-                {
-                    //deal with plugin
-                    var p = (from plugin in myApp.Plugins where plugin.GetType().Name == action.Action && plugin.IsEnabled select plugin).SingleOrDefault();
-                    if(p!=null)
-                    {
-                        var ret = await p.DoWorkAsync(action.Data);
-                    }
-                }
-                else
-                {
-                    //no plugin, so just process action directly.
-
-                    switch (action.Action)
-                    {
-                        case "PlayMedia":
-                            switch (System.IO.Path.GetExtension(action.Data).ToLower())
-                            {
-                                //audio
-                                case ".wav":
-                                case ".mp3":
-                                    myApp.PlaySound(action.Data);
-                                    break;
-
-                                //video
-                                case ".mpg":
-                                case ".mpeg":
-                                case ".wmv":
-                                case ".mp4":
-                                    myApp.PlayVideo(action.Data);
-                                    break;
-                            }
-                            break;
-                    }
-                }
+                await myApp.ExecuteActionAsync(action);
             }
         }
 
-        //private void OpenUrl(string url)
-        //{
-        //    try
-        //    {
-        //        Process.Start(url);
-        //    }
-        //    catch
-        //    {
-        //        // hack because of this: https://github.com/dotnet/corefx/issues/10361
-        //        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        //        {
-        //            url = url.Replace("&", "^&");
-        //            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-        //        }
-        //        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        //        {
-        //            Process.Start("xdg-open", url);
-        //        }
-        //        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        //        {
-        //            Process.Start("open", url);
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-        //}
-
     }
-
 }

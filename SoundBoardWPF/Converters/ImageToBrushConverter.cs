@@ -16,13 +16,13 @@ namespace DigitalOx.SoundBoard.Converters
             if (value == null) return null;
             if (string.IsNullOrEmpty((string)value)) return null;
             App myApp = (App)Application.Current;
-            if (!System.IO.File.Exists($"{myApp.SelectedThemePath}/{value}")) return null;
+            if (!System.IO.File.Exists($"{myApp.SelectedProfilePath}/{value}")) return null;
 
             ImageBrush brush = new ImageBrush();
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
             string img = "nopic.png";
-            img = $"{myApp.SelectedThemePath}/{value}";
+            img = $"{myApp.SelectedProfilePath}/{value}";
             bitmap.UriSource = new Uri($"{img}", UriKind.Relative);
             bitmap.EndInit();
             brush.ImageSource = bitmap;

@@ -1,12 +1,15 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace DigitalOx.SoundBoard.Plugin
 {
+    
     public class ActionData
     {
         public string URL { get; set; }
@@ -19,6 +22,7 @@ namespace DigitalOx.SoundBoard.Plugin
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsEnabled { get; set; }
+        public string DataTemplate { get; set; }
 
         private IPluginHost host;
         public IPluginHost Host
@@ -30,6 +34,7 @@ namespace DigitalOx.SoundBoard.Plugin
                 host.Register(this);
             }
         }
+
         #endregion
 
         #region Local members
@@ -40,6 +45,8 @@ namespace DigitalOx.SoundBoard.Plugin
             Name = "Action URL";
             Description = "Launches a URL in the default browser.";
             Id = "E1ABE34F-CBA7-4EAB-97A7-C404E20A136F";
+            ActionData d = new ActionData();
+            DataTemplate = JsonConvert.SerializeObject(d);
         }
 
         public async Task<PluginResponse> DoWorkAsync(object actionData)
@@ -60,6 +67,11 @@ namespace DigitalOx.SoundBoard.Plugin
 
         private void OpenUrl(string url)
         {
+            if(string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+
             try
             {
                 Process.Start(url);

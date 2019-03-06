@@ -22,6 +22,7 @@ namespace DigitalOx.SoundBoard.Plugin
         bool IsEnabled { get; set; }
         string Name { get; set; }
         string Description { get; set; }
+        string DataTemplate { get; set; }
         IPluginHost Host { get; set; }
 
         Task<PluginResponse> DoWorkAsync(object a);

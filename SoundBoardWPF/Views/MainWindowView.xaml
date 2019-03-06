@@ -6,7 +6,9 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib" 
         xmlns:i="clr-namespace:System.Windows.Input;assembly=windowsbase"
         xmlns:converters="clr-namespace:System.ComponentModel;assembly=System.ComponentModel.TypeConverter"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         mc:Ignorable="d"
+        Background="{StaticResource LightBackground}"
         Title="DigitalOx Board"
         Height="768" Width="1024" Loaded="Window_Loaded" Unloaded="Window_Unloaded"  >
 
@@ -32,52 +34,65 @@
             </MenuItem>
         </Menu>
 
-        <Grid DockPanel.Dock="Right" MinWidth="400" Background="{StaticResource LightBackground}">
+        <Grid DockPanel.Dock="Right" MinWidth="400" >
             <StackPanel Orientation="Vertical" >
-                <TextBlock Foreground="{StaticResource Foreground}" Text="Edit Action Button" Margin="0,0,0,5" HorizontalAlignment="Center"></TextBlock>
-                <Grid Visibility="{Binding SelectedActionButton,Converter={StaticResource HiddenIfNullConverter}}" MinWidth="400">
 
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Foreground="{StaticResource Foreground}" FontWeight="Bold" FontSize="20" Text="Edit Action Button" Margin="0,0,0,5" HorizontalAlignment="Center"></TextBlock>
+                    <Button HorizontalAlignment="Right" Click="RemoveActionButton_Click" Visibility="{Binding SelectedActionButton,Converter={StaticResource HiddenIfNullConverter}}" ToolTip="Delete this action button." Margin="10,0,0,0">X</Button>
+                </StackPanel>
+                <Grid Visibility="{Binding SelectedActionButton,Converter={StaticResource HiddenIfNullConverter}}" MinWidth="400">
                     <!--MinWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}"-->
                     <StackPanel Margin="3" Orientation="Vertical" HorizontalAlignment="Center" >
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="3" Text="Title: "></TextBlock>
                             <TextBox Margin="3" Text="{Binding Path=SelectedActionButton.Title}" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}"></TextBox>
-                            <Button HorizontalAlignment="Right" Click="RemoveAction_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}">Remove</Button>
                         </StackPanel>
 
-                        <StackPanel Margin="3" Orientation="Vertical">
-                            <TextBlock Margin="3" Text="Button Color"></TextBlock>
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <TextBlock Margin="3" Text="Color:"></TextBlock>
                             <Rectangle Margin="3" Width="25" Height="25" Stroke="Black" Fill="{Binding Path=SelectedActionButton.Color,Converter={StaticResource ColorToBrushConverter}}"></Rectangle>
-                            <Button Margin="3" Click="ChangeColorButton_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}">...</Button>
+                            <Button Margin="3" Click="ChangeColorButton_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}" ToolTip="Change color using color picker.">...</Button>
                         </StackPanel>
-                        <StackPanel Margin="3" Orientation="Vertical" >
-                            <TextBlock Margin="3" Text="Button Image"></TextBlock>
-                            <Image Source="{Binding Path=SelectedActionButton.Image,Converter={StaticResource ImageSourceConverter}}" Stretch="Uniform" Width="80"></Image>
-                            <Button Margin="3" Click="ChangeImageButton_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}">...</Button>
-                            <Button Margin="3" Click="PasteFromClipboard_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}">Paste from Clipboard</Button>
+                        <StackPanel Margin="3" Orientation="Horizontal" >
+                            <TextBlock Margin="3" Text="Image:"></TextBlock>
+                            <Image Source="{Binding Path=SelectedActionButton.Image,Converter={StaticResource ImageSourceConverter}}" Stretch="Uniform" Width="120"></Image>
+                            <Button Margin="3" Click="ChangeImageButton_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}" ToolTip="Browse for an image file.">...</Button>
+                            <Button Margin="3" Click="PasteFromClipboard_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}" ToolTip="Create picture from clipboard contents.">Paste from Clipboard</Button>
+                            <Button Margin="3" Click="RemovePicture_Click" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}" ToolTip="Remove picture from the button.">X</Button>
                         </StackPanel>
 
-                        <StackPanel Margin="3" Orientation="Vertical">
-                            <TextBlock Margin="3" Text="Hot Key"></TextBlock>
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <TextBlock Margin="3" Text="Hot Key:"></TextBlock>
                             <ComboBox Margin="3" x:Name="cmbEnumType" IsEnabled="{Binding SelectedActionButton,Converter={StaticResource ObjectIsNullConverter}}" SelectedValue="{Binding Path=SelectedActionButton.TheKey}" ItemsSource="{Binding Source={StaticResource keyData}}"></ComboBox>
                         </StackPanel>
                         <StackPanel Margin="3" Orientation="Vertical">
                             <TextBlock Margin="3" Text="Action(s)"></TextBlock>
-                            <ListBox ItemsSource="{Binding SelectedActionButton.Actions, UpdateSourceTrigger=PropertyChanged}">
+                            <ListBox ItemsSource="{Binding SelectedActionButton.Actions, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Extended" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Margin="0,2">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="200" />
                                                 <ColumnDefinition Width="100" />
+                                                <ColumnDefinition Width="200" />
+                                                <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding Path=Data}" Grid.Column="0" />
-                                            <Button Content="{Binding Path=Action}" Grid.Column="1"></Button>
+                                            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                                <Button Style="{StaticResource RoundCorner}" Click="PlayAction_Click">
+                                                    <Path Stroke="DarkBlue" StrokeLineJoin="Round"
+                                                        StrokeThickness="2" Fill="White"
+                                                        Data="M 0,0 L 12,7 0,14 Z"/>
+                                                </Button>
+                                                <TextBlock Text="{Binding Path=Action}"></TextBlock>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Path=Data}" Grid.Column="1" />
+                                            <Button Click="RemoveActionFromButton_Click" Content="X" Grid.Column="2"></Button>
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </StackPanel>
+                        <Button Content="Add New Action" Click="NewActionButton_Click"></Button>
                     </StackPanel>
                 </Grid>
             </StackPanel>

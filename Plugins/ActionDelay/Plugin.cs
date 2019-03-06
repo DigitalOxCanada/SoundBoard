@@ -7,7 +7,7 @@ namespace DigitalOx.SoundBoard.Plugin
 {
     public class ActionData
     {
-        public int Duration { get; set; }
+        public int Duration { get; set; } = 1000;
     }
 
     class ActionDelay : IPlugin
@@ -17,6 +17,7 @@ namespace DigitalOx.SoundBoard.Plugin
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsEnabled { get; set; }
+        public string DataTemplate { get; set; }
 
         private IPluginHost host;
         public IPluginHost Host
@@ -38,6 +39,8 @@ namespace DigitalOx.SoundBoard.Plugin
             Name = "Action Delay";
             Description = "Creates a delay before returning for the next action.";
             Id = "4B12FEE3-62F9-4BF4-AB3E-94B7247C1755";
+            ActionData d = new ActionData();
+            DataTemplate = JsonConvert.SerializeObject(d);
         }
 
         public async Task<PluginResponse> DoWorkAsync(object actionData)

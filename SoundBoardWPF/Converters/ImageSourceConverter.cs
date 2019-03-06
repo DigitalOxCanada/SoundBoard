@@ -15,8 +15,8 @@ namespace DigitalOx.SoundBoard.Converters
         {
             if (value == null) return null;
             App myApp = (App)Application.Current;
-            if (!System.IO.File.Exists($"{myApp.SelectedThemePath}/{value}")) return null;
-            var fn = $"{myApp.SelectedThemePath}/{value}";
+            if (!System.IO.File.Exists($"{myApp.SelectedProfilePath}/{value}")) return null;
+            var fn = $"{myApp.SelectedProfilePath}/{value}";
 
             BitmapImage image = new BitmapImage();
             image.BeginInit();
